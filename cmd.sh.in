@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export PKG_CONFIG_PATH="@CMAKE_BINARY_DIR@/lib/pkgconfig"
+
+cmd=$1
+shift
+
+$cmd "$@"
