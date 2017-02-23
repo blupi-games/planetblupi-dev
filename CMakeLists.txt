@@ -69,6 +69,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-iconv
     --disable-programs
     --disable-doc
+    --disable-yasm
     --disable-avdevice
     --disable-avfilter
     --disable-network
