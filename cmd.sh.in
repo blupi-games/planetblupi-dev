@@ -1,6 +1,9 @@
 #!/bin/bash
 
 export PKG_CONFIG_PATH="@CMAKE_BINARY_DIR@/lib/pkgconfig"
+export INCLUDE_PATH="@CMAKE_BINARY_DIR@/include"
+export LIBRARY_PATH="@CMAKE_BINARY_DIR@/lib"
+export BINARY_PATH="@CMAKE_BINARY_DIR@/bin"
 
 cmd=$1
 shift
