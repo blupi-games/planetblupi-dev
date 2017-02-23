@@ -13,17 +13,29 @@ set (CMD ${CMAKE_BINARY_DIR}/cmd.sh)
 ## zlib
 #########
 
-ExternalProject_Add (zlib_Project
-  URL http://www.zlib.net/zlib-1.2.11.tar.gz
-  PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${CMD} ./configure
-    --prefix=${CMAKE_BINARY_DIR}
-    --static
-  BUILD_COMMAND ${CMD} make
-  INSTALL_COMMAND ${CMD} make install
-  BUILD_IN_SOURCE 1
-  INSTALL_DIR ${CMAKE_BINARY_DIR}
-)
+if (WIN32)
+  ExternalProject_Add (zlib_Project
+    URL http://www.zlib.net/zlib-1.2.11.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND
+    BUILD_COMMAND ${CMD} make -fwin32/Makefile.gcc
+    INSTALL_COMMAND ${CMD} make install -fwin32/Makefile.gcc
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+  )
+else ()
+  ExternalProject_Add (zlib_Project
+    URL http://www.zlib.net/zlib-1.2.11.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --static
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+  )
+endif ()
 
 #########
 ## zlib
