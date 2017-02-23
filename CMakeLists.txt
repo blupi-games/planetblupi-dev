@@ -242,6 +242,8 @@ ExternalProject_Add (SDL_kitchensink_Project
 
 ExternalProject_Add (planetblupi_Project
   URL ${CMAKE_SOURCE_DIR}/planetblupi
+  DOWNLOAD_COMMAND ""
+  SOURCE_DIR ${CMAKE_SOURCE_DIR}/planetblupi
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
