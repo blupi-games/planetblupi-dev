@@ -38,7 +38,7 @@ else ()
 endif ()
 
 #########
-## zlib
+## libpng
 #########
 
 ExternalProject_Add (libpng_Project
