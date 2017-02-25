@@ -3,9 +3,6 @@ cmake_minimum_required (VERSION 3.2)
 
 include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
-set (APPIMAGE_ASSISTANT_PROGRAM CACHE FILEPATH "AppImageAssistant executable")
-set (APPIMAGE_APPRUN_PROGRAM CACHE FILEPATH "AppImage AppRun executable")
-
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
@@ -222,6 +219,27 @@ ExternalProject_Add (SDL_kitchensink_Project
 ## planetblupi
 ##############
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  set (APPIMAGE_APPRUN_BIN     "AppRun-x86_64")
+  set (APPIMAGE_APPRUN_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_APPRUN_BIN}")
+  set (APPIMAGE_APPRUN_PROGRAM "${CMAKE_BINARY_DIR}/bin/${APPIMAGE_APPRUN_BIN}")
+
+  set (APPIMAGE_TOOL_BIN     "appimagetool-x86_64.AppImage")
+  set (APPIMAGE_TOOL_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_TOOL_BIN}")
+  set (APPIMAGE_TOOL_PROGRAM "${CMAKE_BINARY_DIR}/bin/${APPIMAGE_TOOL_BIN}")
+
+  if (NOT EXISTS "${APPIMAGE_APPRUN_PROGRAM}")
+    file (DOWNLOAD "${APPIMAGE_APPRUN_URL}" "${APPIMAGE_APPRUN_PROGRAM}")
+  endif ()
+
+  if (NOT EXISTS "${APPIMAGE_TOOL_PROGRAM}")
+    file (DOWNLOAD "${APPIMAGE_TOOL_URL}" "${APPIMAGE_TOOL_PROGRAM}")
+  endif ()
+
+  execute_process (COMMAND /bin/chmod 0755 "${APPIMAGE_APPRUN_PROGRAM}")
+  execute_process (COMMAND /bin/chmod 0755 "${APPIMAGE_TOOL_PROGRAM}")
+endif ()
+
 ExternalProject_Add (planetblupi_Project
   URL ${CMAKE_SOURCE_DIR}/planetblupi
   DOWNLOAD_COMMAND ""
@@ -230,7 +248,7 @@ ExternalProject_Add (planetblupi_Project
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
-             -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_ASSISTANT_PROGRAM}
+             -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
