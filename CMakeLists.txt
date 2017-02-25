@@ -102,30 +102,6 @@ ExternalProject_Add (FFmpeg_Project
   INSTALL_DIR ${CMAKE_BINARY_DIR}
 )
 
-#########
-## libass
-#########
-
-# ExternalProject_Add (libass_Project
-#   URL https://github.com/libass/libass/releases/download/0.13.6/libass-0.13.6.tar.xz
-#   PREFIX ${CMAKE_BINARY_DIR}
-#   CONFIGURE_COMMAND ./configure
-#     --prefix=${CMAKE_BINARY_DIR}
-#     --disable-shared
-#     --enable-static
-#     --disable-fontconfig
-#     --disable-directwrite
-#     --disable-coretext
-#     --disable-harfbuzz
-#     --disable-asm
-#     --disable-rasterizer
-#     --disable-require-system-font-provider
-#   BUILD_COMMAND make
-#   INSTALL_COMMAND make install
-#   BUILD_IN_SOURCE 1
-#   INSTALL_DIR ${CMAKE_BINARY_DIR}
-# )
-
 #######
 ## SDL2
 #######
