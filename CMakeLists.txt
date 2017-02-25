@@ -211,6 +211,7 @@ ExternalProject_Add (SDL_kitchensink_Project
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
   INSTALL_DIR ${CMAKE_BINARY_DIR}
+  BUILD_ALWAYS 1
   DEPENDS SDL2_Project FFmpeg_Project
 )
 
@@ -226,5 +227,6 @@ ExternalProject_Add (planetblupi_Project
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
   INSTALL_DIR ${CMAKE_BINARY_DIR}
+  BUILD_ALWAYS 1
   DEPENDS SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project
 )
