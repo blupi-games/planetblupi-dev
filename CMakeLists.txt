@@ -228,7 +228,9 @@ ExternalProject_Add (SDL2_mixer_Project
 ##################
 
 ExternalProject_Add (SDL_kitchensink_Project
-  GIT_REPOSITORY https://github.com/Skywalker13/SDL_kitchensink.git
+  URL ${CMAKE_SOURCE_DIR}/SDL_kitchensink
+  DOWNLOAD_COMMAND ""
+  SOURCE_DIR ${CMAKE_SOURCE_DIR}/SDL_kitchensink
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
