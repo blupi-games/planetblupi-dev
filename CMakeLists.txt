@@ -37,6 +37,41 @@ else ()
   )
 endif ()
 
+###########
+## libiconv
+###########
+
+ExternalProject_Add (libiconv_Project
+  URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+  PREFIX ${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND ${CMD} ./configure
+    --prefix=${CMAKE_BINARY_DIR}
+    --disable-shared
+    --enable-static
+  BUILD_COMMAND ${CMD} make
+  INSTALL_COMMAND ${CMD} make install
+  BUILD_IN_SOURCE 1
+  INSTALL_DIR ${CMAKE_BINARY_DIR}
+)
+
+##########
+## gettext
+##########
+
+ExternalProject_Add (gettext_Project
+  URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
+  PREFIX ${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND cd gettext-runtime && ${CMD} ./configure
+    --prefix=${CMAKE_BINARY_DIR}
+    --disable-shared
+    --enable-static
+  BUILD_COMMAND ${CMD} make -C gettext-runtime
+  INSTALL_COMMAND ${CMD} make -C gettext-runtime install
+  BUILD_IN_SOURCE 1
+  INSTALL_DIR ${CMAKE_BINARY_DIR}
+  DEPENDS libiconv_Project
+)
+
 #########
 ## libpng
 #########
@@ -252,5 +287,5 @@ ExternalProject_Add (planetblupi_Project
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
-  DEPENDS SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project
+  DEPENDS SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
 )
