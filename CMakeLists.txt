@@ -141,6 +141,26 @@ ExternalProject_Add (FFmpeg_Project
 ## SDL2
 #######
 
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  set (SDL2_CONFIGURE --enable-video-x11
+                      --enable-x11-shared
+                      --enable-video-wayland
+                      --enable-wayland-shared
+                      --enable-video-opengl
+                      --enable-oss
+                      --enable-alsa
+                      --enable-alsa-shared
+                      --enable-sndio
+                      --enable-sndio-shared
+                      --enable-pulseaudio
+                      --enable-pulseaudio-shared)
+elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  set (SDL2_CONFIGURE --enable-directx
+                      --enable-render-d3d)
+else ()
+  set (SDL2_CONFIGURE)
+endif ()
+
 ExternalProject_Add (SDL2_Project
   URL https://www.libsdl.org/release/SDL2-2.0.5.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
@@ -150,6 +170,7 @@ ExternalProject_Add (SDL2_Project
     --enable-static
     --disable-joystick
     --disable-haptic
+    ${SDL2_CONFIGURE}
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
