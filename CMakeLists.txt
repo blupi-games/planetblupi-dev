@@ -172,7 +172,7 @@ ExternalProject_Add (SDL2_Project
     --disable-joystick
     --disable-haptic
     ${SDL2_CONFIGURE}
-  BUILD_COMMAND ${CMD} make
+  BUILD_COMMAND ${CMD} make CFLAGS="-DINFTIM=-1"
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
