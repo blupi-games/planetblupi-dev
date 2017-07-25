@@ -156,7 +156,8 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
                       --enable-pulseaudio-shared)
 elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   set (SDL2_CONFIGURE --enable-directx
-                      --enable-render-d3d)
+                      --enable-render-d3d
+                      --enable-video-opengl)
 else ()
   set (SDL2_CONFIGURE)
 endif ()
