@@ -163,7 +163,7 @@ else ()
 endif ()
 
 ExternalProject_Add (SDL2_Project
-  URL https://www.libsdl.org/release/SDL2-2.0.5.tar.gz
+  URL https://hg.libsdl.org/SDL/archive/0e0f4e54706b.tar.bz2
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
