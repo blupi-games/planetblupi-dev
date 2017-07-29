@@ -43,18 +43,20 @@ endif ()
 ## libiconv
 ###########
 
-ExternalProject_Add (libiconv_Project
-  URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
-  PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${CMD} ./configure
-    --prefix=${CMAKE_BINARY_DIR}
-    --disable-shared
-    --enable-static
-  BUILD_COMMAND ${CMD} make
-  INSTALL_COMMAND ${CMD} make install
-  BUILD_IN_SOURCE 1
-  INSTALL_DIR ${CMAKE_BINARY_DIR}
-)
+if (NOT APPLE)
+  ExternalProject_Add (libiconv_Project
+    URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+  )
+endif ()
 
 ##########
 ## gettext
@@ -71,7 +73,7 @@ ExternalProject_Add (gettext_Project
   INSTALL_COMMAND ${CMD} make -C gettext-runtime install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS libiconv_Project
+#  DEPENDS libiconv_Project
 )
 
 #########
@@ -255,7 +257,7 @@ ExternalProject_Add (SDL2_mixer_Project
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS SDL2_Project
+  DEPENDS SDL2_Project # libiconv_Project
 )
 
 ##################
