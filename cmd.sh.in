@@ -4,7 +4,7 @@ export PKG_CONFIG_PATH="@CMAKE_BINARY_DIR@/lib/pkgconfig"
 export INCLUDE_PATH="@CMAKE_BINARY_DIR@/include"
 export LIBRARY_PATH="@CMAKE_BINARY_DIR@/lib"
 export BINARY_PATH="@CMAKE_BINARY_DIR@/bin"
-export LDFLAGS="@CMAKE_LDFLAGS@ -L$LIBRARY_PATH"
+export LDFLAGS="@CMAKE_LDFLAGS@"
 
 cmd=$1
 shift

@@ -6,7 +6,9 @@ include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
-set (CMAKE_LDFLAGS "-framework AudioToolBox -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
+if (APPLE)
+  set (CMAKE_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
+endif ()
 
 configure_file (cmd.sh.in cmd.sh @ONLY)
 set (CMD ${CMAKE_BINARY_DIR}/cmd.sh)
