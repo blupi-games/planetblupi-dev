@@ -64,6 +64,11 @@ endif ()
 ## gettext
 ##########
 
+set (gettext_DEPENDS)
+if (APPLE)
+  set (gettext_DEPENDS "${gettext_DEPENDS} libiconv_Project")
+endif ()
+
 ExternalProject_Add (gettext_Project
   URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
@@ -75,7 +80,7 @@ ExternalProject_Add (gettext_Project
   INSTALL_COMMAND ${CMD} make -C gettext-runtime install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-#  DEPENDS libiconv_Project
+  DEPENDS ${gettext_DEPENDS}
 )
 
 #########
@@ -225,6 +230,11 @@ ExternalProject_Add (SDL2_image_Project
 ## SDL2_mixer
 #############
 
+set (SDL2_mixer_DEPENDS SDL2_Project)
+if (APPLE)
+  set (SDL2_mixer_DEPENDS "${SDL2_mixer_DEPENDS} libiconv_Project")
+endif ()
+
 ExternalProject_Add (SDL2_mixer_Project
   URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
@@ -259,7 +269,7 @@ ExternalProject_Add (SDL2_mixer_Project
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS SDL2_Project # libiconv_Project
+  DEPENDS ${SDL2_mixer_DEPENDS}
 )
 
 ##################
