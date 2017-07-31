@@ -6,6 +6,7 @@ include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
+# It's an hack in order to be able to link statically planetblupi on darwin.
 if (APPLE)
   set (CMAKE_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
 endif ()
