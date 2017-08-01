@@ -6,6 +6,11 @@ include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
+# It's an hack in order to be able to link statically planetblupi on darwin.
+if (APPLE)
+  set (CMAKE_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
+endif ()
+
 configure_file (cmd.sh.in cmd.sh @ONLY)
 set (CMD ${CMAKE_BINARY_DIR}/cmd.sh)
 
@@ -41,22 +46,29 @@ endif ()
 ## libiconv
 ###########
 
-ExternalProject_Add (libiconv_Project
-  URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
-  PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${CMD} ./configure
-    --prefix=${CMAKE_BINARY_DIR}
-    --disable-shared
-    --enable-static
-  BUILD_COMMAND ${CMD} make
-  INSTALL_COMMAND ${CMD} make install
-  BUILD_IN_SOURCE 1
-  INSTALL_DIR ${CMAKE_BINARY_DIR}
-)
+if (NOT APPLE)
+  ExternalProject_Add (libiconv_Project
+    URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+  )
+endif ()
 
 ##########
 ## gettext
 ##########
+
+set (gettext_DEPENDS)
+if (APPLE)
+  set (gettext_DEPENDS "${gettext_DEPENDS} libiconv_Project")
+endif ()
 
 ExternalProject_Add (gettext_Project
   URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
@@ -69,7 +81,7 @@ ExternalProject_Add (gettext_Project
   INSTALL_COMMAND ${CMD} make -C gettext-runtime install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS libiconv_Project
+  DEPENDS ${gettext_DEPENDS}
 )
 
 #########
@@ -219,6 +231,11 @@ ExternalProject_Add (SDL2_image_Project
 ## SDL2_mixer
 #############
 
+set (SDL2_mixer_DEPENDS SDL2_Project)
+if (APPLE)
+  set (SDL2_mixer_DEPENDS "${SDL2_mixer_DEPENDS} libiconv_Project")
+endif ()
+
 ExternalProject_Add (SDL2_mixer_Project
   URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
@@ -253,7 +270,7 @@ ExternalProject_Add (SDL2_mixer_Project
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS SDL2_Project
+  DEPENDS ${SDL2_mixer_DEPENDS}
 )
 
 ##################
