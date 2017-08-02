@@ -66,7 +66,7 @@ endif ()
 ##########
 
 set (gettext_DEPENDS)
-if (APPLE)
+if (NOT APPLE)
   set (gettext_DEPENDS "${gettext_DEPENDS} libiconv_Project")
 endif ()
 
@@ -232,7 +232,7 @@ ExternalProject_Add (SDL2_image_Project
 #############
 
 set (SDL2_mixer_DEPENDS SDL2_Project)
-if (APPLE)
+if (NOT APPLE)
   set (SDL2_mixer_DEPENDS "${SDL2_mixer_DEPENDS} libiconv_Project")
 endif ()
 
