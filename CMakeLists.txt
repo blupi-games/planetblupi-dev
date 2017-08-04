@@ -153,7 +153,7 @@ ExternalProject_Add (FFmpeg_Project
 ## SDL2
 #######
 
-if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+if (UNIX AND NOT APPLE)
   set (SDL2_CONFIGURE --enable-video-x11
                       --enable-x11-shared
                       --enable-video-wayland
@@ -166,12 +166,13 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
                       --enable-sndio-shared
                       --enable-pulseaudio
                       --enable-pulseaudio-shared)
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+elseif (MINGW)
   set (SDL2_CONFIGURE --enable-directx
                       --enable-render-d3d
                       --enable-video-opengl)
-else ()
-  set (SDL2_CONFIGURE)
+elseif (APPLE)
+  set (SDL2_CONFIGURE --enable-video-opengl
+                      --enable-video-cocoa)
 endif ()
 
 ExternalProject_Add (SDL2_Project
