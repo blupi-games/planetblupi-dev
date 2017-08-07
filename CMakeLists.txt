@@ -176,7 +176,7 @@ elseif (APPLE)
 endif ()
 
 ExternalProject_Add (SDL2_Project
-  URL https://hg.libsdl.org/SDL/archive/6b835032ce78.tar.bz2
+  URL http://hg.libsdl.org/SDL/archive/3d0bbfe683a8.tar.bz2
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -185,7 +185,7 @@ ExternalProject_Add (SDL2_Project
     --disable-joystick
     --disable-haptic
     ${SDL2_CONFIGURE}
-  BUILD_COMMAND ${CMD} make CFLAGS="-DINFTIM=-1"
+  BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
