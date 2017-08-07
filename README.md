@@ -110,7 +110,7 @@ If you have built a release, you will find the output in the appropriate
 directory according to the platform.
 
 -   **Linux**: look at `Release/linux-appimage`
--   **Darwin**: look at `Release/src/planetblupi_Project/???`
+-   **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
 -   **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
 
 
