@@ -84,6 +84,18 @@ ExternalProject_Add (libcurl_Project
     --disable-sspi
     --disable-ntlm-wb
     --disable-unix-socket
+    --without-winssl
+    --without-darwinssl
+    --without-ssl
+    --without-gnutls
+    --without-polarssl
+    --without-mbedtls
+    --without-cyassl
+    --without-axtls
+    --without-libpsl
+    --without-libmetalink
+    --without-libssh2
+    --without-librtmp
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
