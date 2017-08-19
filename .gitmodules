@@ -7,3 +7,6 @@
 [submodule "planetblupi-data"]
 	path = planetblupi-data
 	url = ssh-324020-schroeterm@schroetersa.ch:/kunden/264795_8004/web/1221820/A1221820/devel/planetblupi-data
+[submodule "planetblupi-www"]
+	path = planetblupi-www
+	url = ssh-324020-schroeterm@schroetersa.ch:/kunden/264795_8004/web/1221820/A1221820/devel/planetblupi-www
