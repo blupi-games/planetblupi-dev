@@ -50,7 +50,8 @@ You need the usual development packages for C++ ([GCC][4]) with pkg-config and
 ### Darwin
 
 You need the development commandline tools provided by Apple via Xcode (Clang),
-pkg-config and [CMake][6].
+pkg-config and [CMake][6]. It shoulw be possible to use [GCC][4] via
+[Homebrew][7] or [MacPorts][8].
 
 ### Windows with [MSYS2][3]
 
@@ -120,3 +121,5 @@ directory according to the platform.
 [4]: https://gcc.gnu.org
 [5]: https://clang.llvm.org
 [6]: https://cmake.org
+[7]: https://brew.sh
+[8]: https://macports.org
