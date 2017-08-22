@@ -96,6 +96,7 @@ ExternalProject_Add (libcurl_Project
     --without-libmetalink
     --without-libssh2
     --without-librtmp
+    --without-nghttp2
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
