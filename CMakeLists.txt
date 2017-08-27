@@ -395,5 +395,6 @@ ExternalProject_Add (planetblupi_Project
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
 set (CPACK_SOURCE_GENERATOR "TBZ2")
-set (CPACK_SOURCE_PACKAGE_FILE_NAME "planetblupi")
+set (CPACK_SOURCE_PACKAGE_FILE_NAME "planetblupi-dev")
+set (CPACK_SOURCE_IGNORE_FILES "/build/;/Debug/;/Release/;/.git/;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
