@@ -391,3 +391,9 @@ ExternalProject_Add (planetblupi_Project
   BUILD_ALWAYS 1
   DEPENDS argagg_Project libcurl_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
 )
+
+add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+
+set (CPACK_SOURCE_GENERATOR "TBZ2")
+set (CPACK_SOURCE_PACKAGE_FILE_NAME "planetblupi")
+include (CPack)
