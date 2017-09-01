@@ -114,6 +114,23 @@ directory according to the platform.
 -   **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
 -   **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
 
+# Licenses
+
+_Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
+
+| Project | License | Description |
+| --- | --- | --- |
+| argagg          | MIT            | simple C++11 command line arg ument parser                                                  |
+| FFmpeg          | LGPLv2.1       | complete, cross-platform solution to record, convert and stream audio and video             |
+| GNU/gettext     | GPLv3          | an i18n and l10n system commonly used for writing multilingual programs                     |
+| libcurl         | MIT/X derivate | a free and easy-to-use client-side URL transfer library                                     |
+| GNU/libiconv    | GPLv3          | a standardized API used to convert between different character encodings                    |
+| libpng          | own license    | the official PNG reference library                                                          |
+| SDL_kitchensink | MIT            | Simple SDL2 / FFmpeg library for audio/video playback written in C99                        |
+| SDL2            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
+| SDL2_image      | zlib license   | an image loading library that is used with the SDL library                                  |
+| SDL2_mixer      | zlib license   | a sound mixing library that is used with the SDL library                                    |
+| zlib            | own license    | a Massively Spiffy Yet Delicately Unobtrusive Compression Library                           |
 
 [1]: http://appimage.org
 [2]: http://nsis.sourceforge.net
