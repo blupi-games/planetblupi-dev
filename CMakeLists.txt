@@ -229,6 +229,35 @@ if (UNIX AND NOT APPLE)
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
   )
+
+  ExternalProject_Add (libpulse_Project
+    URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+      --enable-alsa
+      --disable-nls
+      --disable-x11
+      --disable-tests
+      --disable-gconf
+      --disable-glib2
+      --disable-gtk3
+      --disable-jack
+      --disable-openssl
+      --disable-lirc
+      --disable-dbus
+      --disable-udev
+      --without-caps
+      --disable-systemd-daemon
+      --enable-static-bins
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+    DEPENDS libasound_Project
+  )
 endif ()
 
 #######
@@ -246,7 +275,7 @@ if (UNIX AND NOT APPLE)
                       --disable-alsa-shared
                       --disable-sndio
                       --disable-sndio-shared
-                      --disable-pulseaudio
+                      --enable-pulseaudio
                       --disable-pulseaudio-shared)
 elseif (MINGW)
   set (SDL2_CONFIGURE --enable-directx
@@ -259,7 +288,7 @@ endif ()
 
 set (SDL2_DEPENDS zlib_Project)
 if (UNIX AND NOT APPLE)
-  set (SDL2_DEPENDS ${SDL2_DEPENDS} libasound_Project)
+  set (SDL2_DEPENDS ${SDL2_DEPENDS} libasound_Project libpulse_Project)
 endif ()
 
 ExternalProject_Add (SDL2_Project
@@ -415,7 +444,7 @@ ExternalProject_Add (planetblupi_Project
              -DSIGN_APP=${SIGN_APP}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
-  DEPENDS argagg_Project libcurl_Project libasound_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
+  DEPENDS argagg_Project libcurl_Project libasound_Project libpulse_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
 )
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
