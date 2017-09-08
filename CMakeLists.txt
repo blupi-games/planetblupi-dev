@@ -212,6 +212,25 @@ ExternalProject_Add (FFmpeg_Project
   INSTALL_DIR ${CMAKE_BINARY_DIR}
 )
 
+############
+## libasound
+############
+
+if (UNIX AND NOT APPLE)
+  ExternalProject_Add (libasound_Project
+    URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+  )
+endif ()
+
 #######
 ## SDL2
 #######
@@ -224,11 +243,11 @@ if (UNIX AND NOT APPLE)
                       --enable-video-opengl
                       --enable-oss
                       --enable-alsa
-                      --enable-alsa-shared
-                      --enable-sndio
-                      --enable-sndio-shared
-                      --enable-pulseaudio
-                      --enable-pulseaudio-shared)
+                      --disable-alsa-shared
+                      --disable-sndio
+                      --disable-sndio-shared
+                      --disable-pulseaudio
+                      --disable-pulseaudio-shared)
 elseif (MINGW)
   set (SDL2_CONFIGURE --enable-directx
                       --enable-render-d3d
@@ -236,6 +255,11 @@ elseif (MINGW)
 elseif (APPLE)
   set (SDL2_CONFIGURE --enable-video-opengl
                       --enable-video-cocoa)
+endif ()
+
+set (SDL2_DEPENDS zlib_Project)
+if (UNIX AND NOT APPLE)
+  set (SDL2_DEPENDS ${SDL2_DEPENDS} libasound_Project)
 endif ()
 
 ExternalProject_Add (SDL2_Project
@@ -252,7 +276,7 @@ ExternalProject_Add (SDL2_Project
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
   INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS zlib_Project
+  DEPENDS ${SDL2_DEPENDS}
 )
 
 #############
@@ -391,7 +415,7 @@ ExternalProject_Add (planetblupi_Project
              -DSIGN_APP=${SIGN_APP}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
-  DEPENDS argagg_Project libcurl_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
+  DEPENDS argagg_Project libcurl_Project libasound_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
 )
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
