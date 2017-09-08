@@ -388,6 +388,7 @@ ExternalProject_Add (planetblupi_Project
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+             -DSIGN_APP=${SIGN_APP}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
   DEPENDS argagg_Project libcurl_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
