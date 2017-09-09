@@ -249,17 +249,36 @@ if (UNIX AND NOT APPLE)
       --disable-nls
       --disable-x11
       --disable-tests
+      --disable-esound
+      --disable-waveout
       --disable-gconf
       --disable-glib2
       --disable-gtk3
       --disable-jack
+      --disable-asyncns
+      --disable-avahi
       --disable-openssl
+      --disable-tcpwrap
       --disable-lirc
       --disable-dbus
       --disable-udev
-      --without-caps
+      --disable-bluez4
+      --disable-bluez5
+      --disable-hal-compat
+      --disable-ipv6
+      --disable-webrtc-aec
       --disable-systemd-daemon
+      --disable-systemd-login
+      --disable-systemd-journal
+      --disable-manpages
+      --disable-default-build-tests
+      --disable-legacy-database-entry-format
       --enable-static-bins
+      --without-caps
+      --without-fftw
+      --without-speex
+      --without-soxr
+      --with-database=simple
     BUILD_COMMAND ${CMD} make
     INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
     BUILD_IN_SOURCE 1
