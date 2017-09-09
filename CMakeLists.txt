@@ -224,6 +224,8 @@ if (UNIX AND NOT APPLE)
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
+      --disable-old-symbols
+      --disable-python
     BUILD_COMMAND ${CMD} make
     INSTALL_COMMAND ${CMD} make install
     BUILD_IN_SOURCE 1
