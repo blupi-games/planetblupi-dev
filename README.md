@@ -120,19 +120,19 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 
 | Project | License | Description |
 | --- | --- | --- |
-| argagg          | MIT            | simple C++11 command line arg ument parser                                                  |
-| FFmpeg          | LGPLv2.1       | complete, cross-platform solution to record, convert and stream audio and video             |
-| GNU/gettext     | GPLv3          | an i18n and l10n system commonly used for writing multilingual programs                     |
-| libasound       | LGPLv2.1       | provides audio and MIDI functionality to the Linux operating system                         |
-| libcurl         | MIT/X derivate | a free and easy-to-use client-side URL transfer library                                     |
-| GNU/libiconv    | GPLv3          | a standardized API used to convert between different character encodings                    |
-| libpng          | own license    | the official PNG reference library                                                          |
-| libpulse        | LGPLv2.1       | API for the PulseAudio network-capable sound server program                                 |
-| SDL_kitchensink | MIT            | Simple SDL2 / FFmpeg library for audio/video playback written in C99                        |
-| SDL2            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
-| SDL2_image      | zlib license   | an image loading library that is used with the SDL library                                  |
-| SDL2_mixer      | zlib license   | a sound mixing library that is used with the SDL library                                    |
-| zlib            | own license    | a Massively Spiffy Yet Delicately Unobtrusive Compression Library                           |
+| [argagg][9]           | MIT            | simple C++11 command line arg ument parser                                                  |
+| [FFmpeg][10]          | LGPLv2.1       | complete, cross-platform solution to record, convert and stream audio and video             |
+| GNU/[gettext][11]     | GPLv3          | an i18n and l10n system commonly used for writing multilingual programs                     |
+| [libasound][12]       | LGPLv2.1       | provides audio and MIDI functionality to the Linux operating system                         |
+| [libcurl][13]         | MIT/X derivate | a free and easy-to-use client-side URL transfer library                                     |
+| GNU/[libiconv][14]    | GPLv3          | a standardized API used to convert between different character encodings                    |
+| [libpng][15]          | own license    | the official PNG reference library                                                          |
+| [libpulse][16]        | LGPLv2.1       | API for the PulseAudio network-capable sound server program                                 |
+| [SDL_kitchensink][17] | MIT            | Simple SDL2 / FFmpeg library for audio/video playback written in C99                        |
+| [SDL2][18]            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
+| [SDL2_image][19]      | zlib license   | an image loading library that is used with the SDL library                                  |
+| [SDL2_mixer][20]      | zlib license   | a sound mixing library that is used with the SDL library                                    |
+| [zlib][21]            | own license    | a Massively Spiffy Yet Delicately Unobtrusive Compression Library                           |
 
 [1]: http://appimage.org
 [2]: http://nsis.sourceforge.net
@@ -142,3 +142,16 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 [6]: https://cmake.org
 [7]: https://brew.sh
 [8]: https://macports.org
+[9]: https://github.com/vietjtnguyen/argagg
+[10]: https://www.ffmpeg.org
+[11]: https://www.gnu.org/software/gettext/
+[12]: https://www.alsa-project.org
+[13]: https://curl.haxx.se/libcurl/
+[14]: https://www.gnu.org/software/libiconv/
+[15]: http://www.libpng.org/pub/png/libpng.html
+[16]: https://freedesktop.org/software/pulseaudio/doxygen/
+[17]: https://github.com/katajakasa/SDL_kitchensink
+[18]: https://www.libsdl.org
+[19]: https://www.libsdl.org/projects/SDL_image/
+[20]: https://www.libsdl.org/projects/SDL_mixer/
+[21]: https://zlib.net/
