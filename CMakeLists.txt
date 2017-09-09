@@ -229,7 +229,13 @@ if (UNIX AND NOT APPLE)
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
   )
+endif ()
 
+###########
+## libpulse
+###########
+
+if (UNIX AND NOT APPLE)
   ExternalProject_Add (libpulse_Project
     URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
