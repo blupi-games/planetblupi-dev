@@ -127,7 +127,7 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 | libcurl         | MIT/X derivate | a free and easy-to-use client-side URL transfer library                                     |
 | GNU/libiconv    | GPLv3          | a standardized API used to convert between different character encodings                    |
 | libpng          | own license    | the official PNG reference library                                                          |
-[ libpulse        | LGPLv2.1       | API for the PulseAudio network-capable sound server program                                 |
+| libpulse        | LGPLv2.1       | API for the PulseAudio network-capable sound server program                                 |
 | SDL_kitchensink | MIT            | Simple SDL2 / FFmpeg library for audio/video playback written in C99                        |
 | SDL2            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
 | SDL2_image      | zlib license   | an image loading library that is used with the SDL library                                  |
