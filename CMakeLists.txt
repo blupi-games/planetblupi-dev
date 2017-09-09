@@ -458,6 +458,20 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   execute_process (COMMAND /bin/chmod 0755 "${APPIMAGE_TOOL_PROGRAM}")
 endif ()
 
+set (planetblupi_DEPS
+  argagg_Project
+  libcurl_Project
+  SDL2_Project
+  SDL2_image_Project
+  SDL2_mixer_Project
+  SDL_kitchensink_Project
+  libpng_Project
+  gettext_Project
+)
+if (UNIX AND NOT APPLE)
+  list (APPEND planetblupi_DEPS libasound_Project libpulse_Project)
+endif ()
+
 ExternalProject_Add (planetblupi_Project
   URL ${CMAKE_SOURCE_DIR}/planetblupi
   DOWNLOAD_COMMAND ""
@@ -471,7 +485,7 @@ ExternalProject_Add (planetblupi_Project
              -DSIGN_APP=${SIGN_APP}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
-  DEPENDS argagg_Project libcurl_Project libasound_Project libpulse_Project SDL2_Project SDL2_image_Project SDL2_mixer_Project SDL_kitchensink_Project libpng_Project gettext_Project
+  DEPENDS ${planetblupi_DEPS}
 )
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
