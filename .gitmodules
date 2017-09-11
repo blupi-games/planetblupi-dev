@@ -3,7 +3,7 @@
 	url = https://github.com/blupi-games/planetblupi.git
 [submodule "SDL_kitchensink"]
 	path = SDL_kitchensink
-	url = https://github.com/Skywalker13/SDL_kitchensink.git
+	url = https://github.com/blupi-games/SDL_kitchensink.git
 [submodule "planetblupi-data"]
 	path = planetblupi-data
 	url = https://github.com/blupi-games/planetblupi-data.git
