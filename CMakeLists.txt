@@ -6,6 +6,8 @@ include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
+set (STATIC_BUILD true)
+
 # It's an hack in order to be able to link statically planetblupi on darwin.
 if (APPLE)
   set (CMAKE_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
@@ -482,6 +484,7 @@ ExternalProject_Add (planetblupi_Project
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+             -DSTATIC_BUILD=${STATIC_BUILD}
              -DSIGN_APP=${SIGN_APP}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
