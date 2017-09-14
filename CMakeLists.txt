@@ -10,16 +10,17 @@ set (STATIC_BUILD true)
 
 # It's an hack in order to be able to link statically planetblupi on darwin.
 if (APPLE)
-  set (CMAKE_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework AudioUnit -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
+  set (ISAPPLE 1)
+  set (CMD_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework AudioUnit -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
 
   if (OLD_SDK)
     set (OSX_SDK_VERSION 10.9)
     set (CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${OSX_SDK_VERSION}.sdk/")
     set (CMAKE_OSX_DEPLOYMENT_TARGET ${OSX_SDK_VERSION})
-    set (CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
-    set (CMAKE_C_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
+    set (CMD_CXXFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
+    set (CMD_CFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
   endif ()
-  set (CMAKE_CPP_FLAGS "-I${CMAKE_BINARY_DIR}/include")
+  set (CMD_CPPFLAGS "-I${CMAKE_BINARY_DIR}/include")
 endif ()
 
 configure_file (cmd.sh.in cmd.sh @ONLY)
