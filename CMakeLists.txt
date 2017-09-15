@@ -164,7 +164,7 @@ ExternalProject_Add (gettext_Project
 #########
 
 ExternalProject_Add (libpng_Project
-  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz?download
+  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
