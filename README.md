@@ -11,7 +11,7 @@ The game is built with static linking as much as possible. The goal is to
 limit the linking of dynamic libraries which are not available natively on
 the host operating system of most users. There is only one exception on Windows
 about the use of the dynamic `libwinpthread-1.dll` library. Most dependencies
-are built via the `CMakeLists.txt` file provided here (linpng, FFmpeg, SDL2,
+are built via the `CMakeLists.txt` file provided here (libpng, FFmpeg, SDL2,
 and more with the appropriate flags). For example, FFmpeg is built only with
 the necessary codecs.
 

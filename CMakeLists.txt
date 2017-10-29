@@ -19,8 +19,8 @@ if (APPLE)
     set (OSX_SDK_VERSION 10.9)
     set (CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${OSX_SDK_VERSION}.sdk/")
     set (CMAKE_OSX_DEPLOYMENT_TARGET ${OSX_SDK_VERSION})
-    set (CMD_CXXFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
-    set (CMD_CFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
+    set (CMD_CXXFLAGS "-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
+    set (CMD_CFLAGS "-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
   endif ()
   set (CMD_CPPFLAGS "-I${CMAKE_BINARY_DIR}/include")
 endif ()
@@ -499,7 +499,9 @@ ExternalProject_Add (SDL_kitchensink_Project
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/SDL_kitchensink
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_COMMAND ${CMD} ${CMAKE_COMMAND}
-  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> ${ADDITIONAL_CMAKE_OPTIONS}
+  CMAKE_ARGS -DDISABLE_SHARED=true
+             -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+             ${ADDITIONAL_CMAKE_OPTIONS}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
   DEPENDS SDL2_Project FFmpeg_Project
@@ -554,6 +556,7 @@ ExternalProject_Add (planetblupi_Project
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+             -DPB_HTTP_VERSION_CHECK=yes
              -DSTATIC_BUILD=${STATIC_BUILD}
              -DSIGN_APP=${SIGN_APP}
              -DANDROID=${ANDROID}
