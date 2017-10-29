@@ -8,7 +8,6 @@ link_directories (${CMAKE_BINARY_DIR}/lib)
 
 option (STATIC_BUILD "Build Planet Blupi statically" ON)
 option (ANDROID "Enable when building for Android" OFF)
-#project(planetblupi-dev)
 
 # It's an hack in order to be able to link statically planetblupi on darwin.
 if (APPLE)
@@ -26,32 +25,28 @@ if (APPLE)
 endif ()
 
 if (ANDROID)
-  # It's really hard to get non-CMake projects build with Android NDK directly, so we'll start by
-  # generating a standalone toolchain (at configure time)
-  execute_process(COMMAND ${ANDROID_NDK}/build/tools/make-standalone-toolchain.sh
-    --platform=${ANDROID_NATIVE_API_LEVEL}
-    --toolchain=${ANDROID_TOOLCHAIN_NAME}
-    --install-dir=${CMAKE_BINARY_DIR}/toolchain
-    --arch=${ANDROID_SYSROOT_ABI}
-    --stl=libc++ ) # TODO: Should probably use ANDROID_STL instead of hardcoding, but the names are different (libc++ vs c++_static)
-
-  # Prepare all cross-compilation options that need to be passed to child CMake projects
+  set (ADDITIONAL_CONFIGURE_OPTIONS
+    --host=${ANDROID_HEADER_TRIPLE}
+  )
   set (ADDITIONAL_CMAKE_OPTIONS
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
     -DANDROID_TOOLCHAIN=${ANDROID_TOOLCHAIN}
     -DANDROID_ABI=${ANDROID_ABI}
-    -DANDROID_STL=${ANDROID_STL})
-
-  # Prepare all cross-compilation options needed for configure-based projects
-  set (ADDITIONAL_CONFIGURE_OPTIONS
-    --host=${ANDROID_HEADER_TRIPLE}
+    -DANDROID_STL=${ANDROID_STL}
   )
   set (ADDITIONAL_TOOL_OPTIONS
-    CC=clang
-    CXX=clang++
+    CC=${CMAKE_C_COMPILER}
+    CPP=${CMAKE_CXX_COMPILER}
   )
-  set (CMD_PATH "${CMAKE_BINARY_DIR}/toolchain/bin")
-  set (CMD_CHOST "${ANDROID_HEADER_TRIPLE}")
+  #set(CMD_CFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_CPPFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_CXXFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_LDFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_LINKER_FLAGS}")
+  set(CMD_CFLAGS "--target=armv5te-none-linux-androideabi --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/sysroot  -Dnative_lib_EXPORTS -isystem /opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/include -isystem /opt/android-sdk/ndk-bundle/sources/android/support/include -isystem /opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++abi/include -isystem /opt/android-sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security")
+  set(CMD_CPPFLAGS "${CMD_CFLAGS}")
+  set(CMD_CXXFLAGS "${CMD_CXXFLAGS}")
+  set(CMD_LDFLAGS "--target=armv5te-none-linux-androideabi --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/sysroot -fPIC -isystem /opt/android-sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -Os -DNDEBUG  -Wl,--exclude-libs,libgcc.a --sysroot /opt/android-sdk/ndk-bundle/platforms/android-19/arch-arm -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--exclude-libs,libunwind.a -L/opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/libs/armeabi -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now")
+  set(CMD_CHOST "${ANDROID_HEADER_TRIPLE}")
 endif()
 
 configure_file (cmd.sh.in cmd.sh @ONLY)
@@ -78,7 +73,7 @@ else ()
     CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --static
-    BUILD_COMMAND ${CMD} make
+    BUILD_COMMAND ${CMD} make libz.a # don't make test programs
     INSTALL_COMMAND ${CMD} make install
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
@@ -102,7 +97,7 @@ ExternalProject_Add (argagg_Project
 ExternalProject_Add (libcurl_Project
   URL https://curl.haxx.se/download/curl-7.55.0.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -157,7 +152,7 @@ if (NOT APPLE)
   ExternalProject_Add (libiconv_Project
     URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -181,7 +176,7 @@ endif ()
 ExternalProject_Add (gettext_Project
   URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND cd gettext-runtime && ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND cd gettext-runtime && ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -200,7 +195,7 @@ ExternalProject_Add (gettext_Project
 ExternalProject_Add (libpng_Project
   URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -215,18 +210,6 @@ ExternalProject_Add (libpng_Project
 #########
 ## FFmpeg
 #########
-
-if (ANDROID)
-  set (ADDITIONAL_FFMPEG_CONFIGURE_OPTIONS
-    --enable-cross-compile
-    --target-os=android
-    --arch=${ANDROID_SYSROOT_ABI}
-    --cross-prefix=${CMAKE_BINARY_DIR}/toolchain/bin/${ANDROID_HEADER_TRIPLE}-)
-    # TODO: We should really be using clang (gcc is deprecated in android NDK) but it doesn't work :(
-    # Try building with:
-    #--toolchain=clang-usan
-    #--as=${CMAKE_BINARY_DIR}/toolchain/bin/${ANDROID_HEADER_TRIPLE}-gcc # Workaround for missing as in clang, looks quite stupid but it works
-endif ()
 
 ExternalProject_Add (FFmpeg_Project
   URL http://www.ffmpeg.org/releases/ffmpeg-3.2.4.tar.xz
@@ -265,7 +248,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-libxcb-shm
     --disable-libxcb-xfixes
     --disable-libxcb-shape
-    ${ADDITIONAL_FFMPEG_CONFIGURE_OPTIONS}
+    ${ADDITIONAL_CONFIGURE_OPTIONS}
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
@@ -280,7 +263,7 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libasound_Project
     URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -302,7 +285,7 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libpulse_Project
     URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -374,7 +357,13 @@ elseif (APPLE)
   set (SDL2_CONFIGURE --enable-video-opengl
                       --enable-video-cocoa)
 elseif (ANDROID)
-  set (SDL2_CONFIGURE --disable-pulseaudio)
+  set (SDL2_CONFIGURE --disable-video-x11
+                      --disable-video-wayland
+                      --disable-video-mir
+                      --disable-oss
+                      --disable-alsa
+                      --disable-sndio
+                      --disable-pulseaudio)
 endif ()
 
 set (SDL2_DEPENDS zlib_Project)
@@ -389,8 +378,7 @@ ExternalProject_Add (SDL2_Project
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
-    #--disable-joystick
-    --enable-joystick # TODO: Default SDL2 android skeleton requires joystick to build, could be probably fixed by commenting out some things
+    --disable-joystick
     --disable-haptic
     ${SDL2_CONFIGURE}
     ${ADDITIONAL_CONFIGURE_OPTIONS}
@@ -408,13 +396,11 @@ ExternalProject_Add (SDL2_Project
 ExternalProject_Add (SDL2_image_Project
   URL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
-  # SDL_MAIN_HANDLED fixes test program linking on Android
-  # TODO: Is there a better way to handle this?
-  CONFIGURE_COMMAND CFLAGS=-DSDL_MAIN_HANDLED ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
-    --disable-sdltest
+    --disable-sdl-test
     --disable-bmp
     --disable-gif
     --disable-jpg
@@ -452,9 +438,7 @@ endif ()
 ExternalProject_Add (SDL2_mixer_Project
   URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
-  # SDL_MAIN_HANDLED fixes test program linking on Android
-  # TODO: Is there a better way to handle this?
-  CONFIGURE_COMMAND CFLAGS=-DSDL_MAIN_HANDLED ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -498,7 +482,7 @@ ExternalProject_Add (SDL_kitchensink_Project
   DOWNLOAD_COMMAND ""
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/SDL_kitchensink
   PREFIX ${CMAKE_BINARY_DIR}
-  CMAKE_COMMAND ${CMD} ${CMAKE_COMMAND}
+  CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> ${ADDITIONAL_CMAKE_OPTIONS}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
@@ -549,7 +533,7 @@ ExternalProject_Add (planetblupi_Project
   DOWNLOAD_COMMAND ""
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/planetblupi
   PREFIX ${CMAKE_BINARY_DIR}
-  CMAKE_COMMAND ${CMD} ${CMAKE_COMMAND}
+  CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
@@ -564,15 +548,13 @@ ExternalProject_Add (planetblupi_Project
 )
 
 if (ANDROID)
-    #find_package (PkgConfig REQUIRED)
-    #pkg_search_module (SDL2 REQUIRED sdl2)
-
+    find_package (PkgConfig REQUIRED)
+    pkg_search_module (SDL2 REQUIRED sdl2)
     add_library(main SHARED android/SDL_android_main.c)
-    add_dependencies (main planetblupi_Project)
-    target_link_libraries (main PUBLIC planetblupi)
-
-    #add_dependencies (main SDL2_Project)
-    target_link_libraries (main PUBLIC -lintl -liconv -lSDL2 -lSDL2_image -lSDL2_mixer -lcurl -lSDL_kitchensink_static -lpng -lavformat -lavcodec -lavutil -lswscale -lswresample -lz -lGLESv1_CM -lGLESv2 -llog -landroid ${CMAKE_CXX_STANDARD_LIBRARIES_INIT})
+    #add_dependencies(main planetblupi_Project SDL2_Project)
+    add_dependencies(main SDL2_Project)
+    #target_link_libraries (main PUBLIC ${CMAKE_BINARY_DIR}/bin/libplanetblupi.a)
+    target_link_libraries(main PUBLIC ${SDL2_STATIC_LIBRARIES})
 endif ()
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
