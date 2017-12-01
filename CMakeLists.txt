@@ -69,7 +69,7 @@ ExternalProject_Add (argagg_Project
 ##########
 
 ExternalProject_Add (libcurl_Project
-  URL https://curl.haxx.se/download/curl-7.57.0.tar.xz
+  URL https://curl.haxx.se/download/curl-7.55.0.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -164,7 +164,7 @@ ExternalProject_Add (gettext_Project
 #########
 
 ExternalProject_Add (libpng_Project
-  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.34.tar.xz
+  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -182,7 +182,7 @@ ExternalProject_Add (libpng_Project
 #########
 
 ExternalProject_Add (FFmpeg_Project
-  URL http://www.ffmpeg.org/releases/ffmpeg-3.3.5.tar.xz
+  URL http://www.ffmpeg.org/releases/ffmpeg-3.2.4.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -230,7 +230,7 @@ ExternalProject_Add (FFmpeg_Project
 
 if (UNIX AND NOT APPLE)
   ExternalProject_Add (libasound_Project
-    URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.5.tar.bz2
+    URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -251,7 +251,7 @@ endif ()
 
 if (UNIX AND NOT APPLE)
   ExternalProject_Add (libpulse_Project
-    URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz
+    URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -352,7 +352,7 @@ ExternalProject_Add (SDL2_Project
 #############
 
 ExternalProject_Add (SDL2_image_Project
-  URL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.2.tar.gz
+  URL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -393,7 +393,7 @@ if (NOT APPLE)
 endif ()
 
 ExternalProject_Add (SDL2_mixer_Project
-  URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.2.tar.gz
+  URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
