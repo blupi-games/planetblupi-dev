@@ -4,6 +4,7 @@ export PKG_CONFIG_PATH="@CMAKE_BINARY_DIR@/lib/pkgconfig"
 export INCLUDE_PATH="@CMAKE_BINARY_DIR@/include"
 export LIBRARY_PATH="@CMAKE_BINARY_DIR@/lib"
 export BINARY_PATH="@CMAKE_BINARY_DIR@/bin"
+export CPPFLAGS="$CPPFLAGS -I$INCLUDE_PATH"
 
 if [ "@ISAPPLE@" = "1" ]; then
   export LDFLAGS="$LDFLAGS @CMD_LDFLAGS@"

@@ -245,6 +245,65 @@ if (UNIX AND NOT APPLE)
   )
 endif ()
 
+#########
+## libogg
+#########
+
+ExternalProject_Add (libogg_Project
+  URL http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz
+  PREFIX ${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND ${CMD} ./configure
+    --prefix=${CMAKE_BINARY_DIR}
+    --disable-shared
+    --enable-static
+  BUILD_COMMAND ${CMD} make
+  INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
+  BUILD_IN_SOURCE 1
+  INSTALL_DIR ${CMAKE_BINARY_DIR}
+)
+
+############
+## libvorbis
+############
+
+ExternalProject_Add (libvorbis_Project
+  URL http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz
+  PREFIX ${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND ${CMD} ./configure
+    --prefix=${CMAKE_BINARY_DIR}
+    --disable-shared
+    --enable-static
+  BUILD_COMMAND ${CMD} make
+  INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
+  BUILD_IN_SOURCE 1
+  INSTALL_DIR ${CMAKE_BINARY_DIR}
+  DEPENDS libogg_Project
+)
+
+#############
+## libsndfile
+#############
+
+if (UNIX AND NOT APPLE)
+  ExternalProject_Add (libsndfile_Project
+    URL http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+      --enable-alsa
+      --disable-sqlite
+      --disable-octave
+      --disable-full-suite
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+    DEPENDS libasound_Project libogg_Project libvorbis_Project
+  )
+endif ()
+
 ###########
 ## libpulse
 ###########
@@ -295,7 +354,7 @@ if (UNIX AND NOT APPLE)
     INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
-    DEPENDS libasound_Project
+    DEPENDS libasound_Project libsndfile_Project
   )
 endif ()
 
@@ -387,7 +446,7 @@ ExternalProject_Add (SDL2_image_Project
 ## SDL2_mixer
 #############
 
-set (SDL2_mixer_DEPENDS SDL2_Project)
+set (SDL2_mixer_DEPENDS SDL2_Project libogg_Project libvorbis_Project)
 if (NOT APPLE)
   set (SDL2_mixer_DEPENDS ${SDL2_mixer_DEPENDS} libiconv_Project)
 endif ()
@@ -407,12 +466,12 @@ ExternalProject_Add (SDL2_mixer_Project
     --disable-music-mod-modplug-shared
     --disable-music-mod-mikmod
     --disable-music-mod-mikmod-shared
-    --enable-music-midi
-    --enable-music-midi-timidity
-    --enable-music-midi-native
+    --disable-music-midi
+    --disable-music-midi-timidity
+    --disable-music-midi-native
     --disable-music-midi-fluidsynth
     --disable-music-midi-fluidsynth-shared
-    --disable-music-ogg
+    --enable-music-ogg
     --disable-music-ogg-tremor
     --disable-music-ogg-shared
     --disable-music-flac
@@ -480,9 +539,13 @@ set (planetblupi_DEPS
   SDL_kitchensink_Project
   libpng_Project
   gettext_Project
+  libvorbis_Project
 )
 if (UNIX AND NOT APPLE)
-  list (APPEND planetblupi_DEPS libasound_Project libpulse_Project)
+  list (APPEND planetblupi_DEPS
+    libasound_Project
+    libpulse_Project
+  )
 endif ()
 
 ExternalProject_Add (planetblupi_Project
