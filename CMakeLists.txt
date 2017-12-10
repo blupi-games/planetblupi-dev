@@ -466,9 +466,9 @@ ExternalProject_Add (SDL2_mixer_Project
     --disable-music-mod-modplug-shared
     --disable-music-mod-mikmod
     --disable-music-mod-mikmod-shared
-    --disable-music-midi
-    --disable-music-midi-timidity
-    --disable-music-midi-native
+    --enable-music-midi
+    --enable-music-midi-timidity
+    --enable-music-midi-native
     --disable-music-midi-fluidsynth
     --disable-music-midi-fluidsynth-shared
     --enable-music-ogg
