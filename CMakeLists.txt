@@ -182,7 +182,7 @@ ExternalProject_Add (libpng_Project
 #########
 
 ExternalProject_Add (FFmpeg_Project
-  URL http://www.ffmpeg.org/releases/ffmpeg-3.2.4.tar.xz
+  URL http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -191,7 +191,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-iconv
     --disable-programs
     --disable-doc
-    --disable-yasm
+    --disable-x86asm
     --disable-avdevice
     --disable-avfilter
     --disable-network
