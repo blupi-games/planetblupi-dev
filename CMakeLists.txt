@@ -114,7 +114,7 @@ endif ()
 
 if (WIN32)
   ExternalProject_Add (zlib_Project
-    URL http://www.zlib.net/zlib-1.2.11.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND
     BUILD_COMMAND ${CMD} make -fwin32/Makefile.gcc
@@ -124,7 +124,7 @@ if (WIN32)
   )
 else ()
   ExternalProject_Add (zlib_Project
-    URL http://www.zlib.net/zlib-1.2.11.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -141,7 +141,7 @@ endif ()
 #########
 
 ExternalProject_Add (argagg_Project
-  URL https://github.com/vietjtnguyen/argagg/archive/0.4.6.tar.gz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}"
 )
@@ -151,7 +151,7 @@ ExternalProject_Add (argagg_Project
 ##########
 
 ExternalProject_Add (libcurl_Project
-  URL https://curl.haxx.se/download/curl-7.55.0.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -205,7 +205,7 @@ ExternalProject_Add (libcurl_Project
 
 if (NOT APPLE)
   ExternalProject_Add (libiconv_Project
-    URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libiconv.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -228,7 +228,7 @@ if (NOT APPLE)
 endif ()
 
 ExternalProject_Add (gettext_Project
-  URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/gettext.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND cd gettext-runtime && ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -246,7 +246,7 @@ ExternalProject_Add (gettext_Project
 #########
 
 ExternalProject_Add (libpng_Project
-  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libpng.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -264,7 +264,7 @@ ExternalProject_Add (libpng_Project
 #########
 
 ExternalProject_Add (FFmpeg_Project
-  URL http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/ffmpeg.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -312,7 +312,7 @@ ExternalProject_Add (FFmpeg_Project
 
 if (UNIX AND NOT APPLE)
   ExternalProject_Add (libasound_Project
-    URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/alsa-lib.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -332,7 +332,7 @@ endif ()
 #########
 
 ExternalProject_Add (libogg_Project
-  URL http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libogg.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -349,7 +349,7 @@ ExternalProject_Add (libogg_Project
 ############
 
 ExternalProject_Add (libvorbis_Project
-  URL http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -368,7 +368,7 @@ ExternalProject_Add (libvorbis_Project
 
 if (UNIX AND NOT APPLE)
   ExternalProject_Add (libsndfile_Project
-    URL http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -392,7 +392,7 @@ endif ()
 
 if (UNIX AND NOT APPLE)
   ExternalProject_Add (libpulse_Project
-    URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -472,7 +472,7 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 ExternalProject_Add (SDL2_Project
-  URL http://hg.libsdl.org/SDL/archive/3d0bbfe683a8.tar.bz2
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2.tar.bz2
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -493,7 +493,7 @@ ExternalProject_Add (SDL2_Project
 #############
 
 ExternalProject_Add (SDL2_image_Project
-  URL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_image.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -534,7 +534,7 @@ if (NOT APPLE)
 endif ()
 
 ExternalProject_Add (SDL2_mixer_Project
-  URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
+  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_mixer.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
