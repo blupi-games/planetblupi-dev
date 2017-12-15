@@ -598,5 +598,5 @@ add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
 set (CPACK_SOURCE_GENERATOR "TXZ")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "planetblupi-dev")
-set (CPACK_SOURCE_IGNORE_FILES "/build/;/Debug/;/Release/;/.git/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+set (CPACK_SOURCE_IGNORE_FILES "/build/;/Debug/;/Release/;/planetblupi-data/;/planetblupi-www/;/.git/;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
