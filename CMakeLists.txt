@@ -26,6 +26,88 @@ endif ()
 configure_file (cmd.sh.in cmd.sh @ONLY)
 set (CMD ${CMAKE_BINARY_DIR}/cmd.sh)
 
+file (DOWNLOAD
+  http://www.zlib.net/zlib-1.2.11.tar.gz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  https://github.com/vietjtnguyen/argagg/archive/0.4.6.tar.gz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg.tar.gz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  https://curl.haxx.se/download/curl-7.55.0.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/gettext.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/libpng.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/ffmpeg.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/libogg.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis.tar.xz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  http://hg.libsdl.org/SDL/archive/3d0bbfe683a8.tar.bz2
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2.tar.bz2
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_image.tar.gz
+  SHOW_PROGRESS
+)
+file (DOWNLOAD
+  https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
+  ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_mixer.tar.gz
+  SHOW_PROGRESS
+)
+
+if (NOT APPLE)
+  file (DOWNLOAD
+    https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+    ${CMAKE_CURRENT_SOURCE_DIR}/externals/libiconv.tar.gz
+    SHOW_PROGRESS
+  )
+endif ()
+
+if (UNIX AND NOT APPLE)
+  file (DOWNLOAD
+    ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
+    ${CMAKE_CURRENT_SOURCE_DIR}/externals/alsa-lib.tar.bz2
+    SHOW_PROGRESS
+  )
+  file (DOWNLOAD
+    http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz
+    ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile.tar.gz
+    SHOW_PROGRESS
+  )
+  file (DOWNLOAD
+    https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
+    ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.gz
+    SHOW_PROGRESS
+  )
+endif ()
+
 #########
 ## zlib
 #########
