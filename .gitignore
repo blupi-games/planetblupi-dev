@@ -1,5 +1,6 @@
 .directory
 *.kdev4
+externals/
 [Bb]uild/
 [Dd]ebug/
 [Rr]elease/
