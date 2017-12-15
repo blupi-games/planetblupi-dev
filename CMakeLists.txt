@@ -103,7 +103,7 @@ if (UNIX AND NOT APPLE)
   )
   file (DOWNLOAD
     https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
-    ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.gz
+    ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
     SHOW_PROGRESS
   )
 endif ()
