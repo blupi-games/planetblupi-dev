@@ -126,9 +126,12 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 | [libasound][12]       | LGPLv2.1       | provides audio and MIDI functionality to the Linux operating system                         |
 | [libcurl][13]         | MIT/X derivate | a free and easy-to-use client-side URL transfer library                                     |
 | GNU/[libiconv][14]    | GPLv3          | a standardized API used to convert between different character encodings                    |
+| [libogg][22]          | own license    | a free, open container format maintained by the Xiph.Org Foundation                         |
 | [libpng][15]          | own license    | the official PNG reference library                                                          |
 | [libpulse][16]        | LGPLv2.1       | API for the PulseAudio network-capable sound server program                                 |
 | [SDL_kitchensink][17] | MIT            | Simple SDL2 / FFmpeg library for audio/video playback written in C99                        |
+| [libsndfile][23]      | LGPLv3         | a C library for reading and writing files containing sampled sound                          |
+| [libvorbis][22]       | own license    | a free and open-source software project headed by the Xiph.Org Foundation                   |
 | [SDL2][18]            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
 | [SDL2_image][19]      | zlib license   | an image loading library that is used with the SDL library                                  |
 | [SDL2_mixer][20]      | zlib license   | a sound mixing library that is used with the SDL library                                    |
@@ -155,3 +158,5 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 [19]: https://www.libsdl.org/projects/SDL_image/
 [20]: https://www.libsdl.org/projects/SDL_mixer/
 [21]: https://zlib.net/
+[22]: https://xiph.org/downloads/
+[23]: http://www.mega-nerd.com/libsndfile/
