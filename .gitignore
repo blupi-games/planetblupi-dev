@@ -1,4 +1,5 @@
 .directory
+*.kdev4
 [Bb]uild/
 [Dd]ebug/
 [Rr]elease/
