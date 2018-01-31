@@ -246,6 +246,8 @@ ExternalProject_Add (FFmpeg_Project
     --disable-libxcb-shm
     --disable-libxcb-xfixes
     --disable-libxcb-shape
+    --disable-jack
+    --disable-sndio
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
@@ -402,7 +404,9 @@ if (UNIX AND NOT APPLE)
                       --disable-sndio
                       --disable-sndio-shared
                       --enable-pulseaudio
-                      --disable-pulseaudio-shared)
+                      --disable-pulseaudio-shared
+                      --disable-jack
+                      --disable-jack-shared)
 elseif (MINGW)
   set (SDL2_CONFIGURE --enable-directx
                       --enable-render-d3d
