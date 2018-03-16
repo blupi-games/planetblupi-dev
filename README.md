@@ -1,4 +1,3 @@
-
 # Planet Blupi development bundle
 
 This bundle is the main repository for building the _Planet Blupi_ game. If
@@ -38,9 +37,9 @@ The source-code is written in C++, only [GCC][4] and [Clang][5] are officially
 supported. The clone must be `recursive` because the development use git
 submodules.
 
--   **source-code**: `planetblupi/`
--   **source-assets**: `planetblupi-data/`
--   **website**: `planetblupi-www/` (see <http://www.blupi.org>)
+* **source-code**: `planetblupi/`
+* **source-assets**: `planetblupi-data/`
+* **website**: `planetblupi-www/` (see <http://www.blupi.org>)
 
 ### Linux
 
@@ -110,16 +109,16 @@ make -j
 If you have built a release, you will find the output in the appropriate
 directory according to the platform.
 
--   **Linux**: look at `Release/linux-appimage/planetblupi.AppImage`
--   **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
--   **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
+* **Linux**: look at `Release/linux-appimage/planetblupi.AppImage`
+* **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
+* **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
 
 # Licenses
 
 _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 
-| Project | License | Description |
-| --- | --- | --- |
+| Project               | License        | Description                                                                                 |
+| --------------------- | -------------- | ------------------------------------------------------------------------------------------- |
 | [argagg][9]           | MIT            | simple C++11 command line arg ument parser                                                  |
 | [FFmpeg][10]          | LGPLv2.1       | complete, cross-platform solution to record, convert and stream audio and video             |
 | GNU/[gettext][11]     | GPLv3          | an i18n and l10n system commonly used for writing multilingual programs                     |
