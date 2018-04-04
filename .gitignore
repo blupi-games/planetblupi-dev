@@ -1,5 +1,5 @@
 .directory
-*.kdev4
+.kdev4/
 externals/
 [Bb]uild/
 [Dd]ebug/
