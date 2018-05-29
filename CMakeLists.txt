@@ -51,7 +51,8 @@ endif ()
 if (UNIX AND NOT APPLE)
   DLEXT (ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2 alsa-lib.tar.bz2)
   DLEXT (http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz libsndfile.tar.gz)
-  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz pulseaudio.tar.xz)
+  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz pulseaudio.tar.xz)
+  DLEXT (http://www.linuxfromscratch.org/patches/blfs/svn/pulseaudio-11.1-glibc_2.27_fix-1.patch pulseaudio.patch)
 endif ()
 
 #########
@@ -342,7 +343,7 @@ if (UNIX AND NOT APPLE)
   ExternalProject_Add (libpulse_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${CMD} ./configure
+    CONFIGURE_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.patch && ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
