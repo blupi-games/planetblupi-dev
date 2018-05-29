@@ -40,8 +40,8 @@ DLEXT (ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz lib
 DLEXT (http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz ffmpeg.tar.xz)
 DLEXT (http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz libogg.tar.xz)
 DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz libvorbis.tar.xz)
-DLEXT (https://www.libsdl.org/release/SDL2-2.0.7.tar.gz SDL2.tar.bz2)
-DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.2.tar.gz SDL2_image.tar.gz)
+DLEXT (https://www.libsdl.org/release/SDL2-2.0.8.tar.gz SDL2.tar.bz2)
+DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.3.tar.gz SDL2_image.tar.gz)
 DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.2.tar.gz SDL2_mixer.tar.gz)
 
 if (NOT APPLE)
