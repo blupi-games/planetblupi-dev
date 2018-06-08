@@ -6,7 +6,7 @@ include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 include_directories (${CMAKE_BINARY_DIR}/include)
 link_directories (${CMAKE_BINARY_DIR}/lib)
 
-set (STATIC_BUILD true)
+option (STATIC_BUILD "Build Planet Blupi statically" ON)
 
 # It's an hack in order to be able to link statically planetblupi on darwin.
 if (APPLE)
