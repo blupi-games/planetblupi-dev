@@ -18,72 +18,39 @@ if (APPLE)
     set (OSX_SDK_VERSION 10.9)
     set (CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${OSX_SDK_VERSION}.sdk/")
     set (CMAKE_OSX_DEPLOYMENT_TARGET ${OSX_SDK_VERSION})
-    set (CMD_CXXFLAGS "-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
-    set (CMD_CFLAGS "-isysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
+    set (CMD_CXXFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
+    set (CMD_CFLAGS "--sysroot ${CMAKE_OSX_SYSROOT} -mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
   endif ()
   set (CMD_CPPFLAGS "-I${CMAKE_BINARY_DIR}/include")
 endif ()
 
 if (ANDROID)
-  # It's really hard to get non-CMake projects build with Android NDK directly, so we'll start by
-  # generating a standalone toolchain (at configure time)
-  execute_process(COMMAND ${ANDROID_NDK}/build/tools/make-standalone-toolchain.sh
-    --platform=${ANDROID_NATIVE_API_LEVEL}
-    --toolchain=${ANDROID_TOOLCHAIN_NAME}
-    --install-dir=${CMAKE_BINARY_DIR}/toolchain
-    --arch=${ANDROID_SYSROOT_ABI}
-    --stl=libc++ ) # TODO: Should probably use ANDROID_STL instead of hardcoding, but the names are different (libc++ vs c++_static)
-
-  # Prepare all cross-compilation options that need to be passed to child CMake projects
+  set (ADDITIONAL_CONFIGURE_OPTIONS
+    --host=${ANDROID_HEADER_TRIPLE}
+  )
   set (ADDITIONAL_CMAKE_OPTIONS
     -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
     -DANDROID_TOOLCHAIN=${ANDROID_TOOLCHAIN}
     -DANDROID_ABI=${ANDROID_ABI}
-    -DANDROID_STL=${ANDROID_STL})
-
-  # Prepare all cross-compilation options needed for configure-based projects
-  set (ADDITIONAL_CONFIGURE_OPTIONS
-    --host=${ANDROID_HEADER_TRIPLE}
+    -DANDROID_STL=${ANDROID_STL}
   )
   set (ADDITIONAL_TOOL_OPTIONS
-    CC=clang
-    CXX=clang++
+    CC=${CMAKE_C_COMPILER}
+    CPP=${CMAKE_CXX_COMPILER}
   )
-  set (CMD_PATH "${CMAKE_BINARY_DIR}/toolchain/bin")
-  set (CMD_CHOST "${ANDROID_HEADER_TRIPLE}")
+  #set(CMD_CFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_CPPFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_CXXFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_COMPILER_FLAGS}")
+  #set(CMD_LDFLAGS "--target=${ANDROID_HEADER_TRIPLE} ${ANDROID_LINKER_FLAGS}")
+  set(CMD_CFLAGS "--target=armv5te-none-linux-androideabi --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/sysroot  -Dnative_lib_EXPORTS -isystem /opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/include -isystem /opt/android-sdk/ndk-bundle/sources/android/support/include -isystem /opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++abi/include -isystem /opt/android-sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security")
+  set(CMD_CPPFLAGS "${CMD_CFLAGS}")
+  set(CMD_CXXFLAGS "${CMD_CXXFLAGS}")
+  set(CMD_LDFLAGS "--target=armv5te-none-linux-androideabi --gcc-toolchain=/opt/android-sdk/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64 --sysroot=/opt/android-sdk/ndk-bundle/sysroot -fPIC -isystem /opt/android-sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -Os -DNDEBUG  -Wl,--exclude-libs,libgcc.a --sysroot /opt/android-sdk/ndk-bundle/platforms/android-19/arch-arm -Wl,--build-id -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Wl,--exclude-libs,libunwind.a -L/opt/android-sdk/ndk-bundle/sources/cxx-stl/llvm-libc++/libs/armeabi -Wl,--no-undefined -Wl,-z,noexecstack -Qunused-arguments -Wl,-z,relro -Wl,-z,now")
+  set(CMD_CHOST "${ANDROID_HEADER_TRIPLE}")
 endif()
 
 configure_file (cmd.sh.in cmd.sh @ONLY)
 set (CMD ${CMAKE_BINARY_DIR}/cmd.sh)
-
-macro (DLEXT in out)
-  if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/${out}")
-    file (DOWNLOAD "${in}" "${CMAKE_CURRENT_SOURCE_DIR}/externals/${out}" SHOW_PROGRESS)
-  endif ()
-endmacro (DLEXT)
-
-DLEXT (http://www.zlib.net/zlib-1.2.11.tar.gz zlib.tar.gz)
-DLEXT (https://github.com/vietjtnguyen/argagg/archive/0.4.6.tar.gz argagg.tar.gz)
-DLEXT (https://curl.haxx.se/download/curl-7.55.0.tar.xz curl.tar.xz)
-DLEXT (http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz gettext.tar.xz)
-DLEXT (ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz libpng.tar.xz)
-DLEXT (http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz ffmpeg.tar.xz)
-DLEXT (http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz libogg.tar.xz)
-DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz libvorbis.tar.xz)
-DLEXT (https://www.libsdl.org/release/SDL2-2.0.8.tar.gz SDL2.tar.bz2)
-DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.3.tar.gz SDL2_image.tar.gz)
-DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.2.tar.gz SDL2_mixer.tar.gz)
-
-if (NOT APPLE)
-  DLEXT (https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz libiconv.tar.gz)
-endif ()
-
-if (UNIX AND NOT APPLE)
-  DLEXT (ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2 alsa-lib.tar.bz2)
-  DLEXT (http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz libsndfile.tar.gz)
-  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz pulseaudio.tar.xz)
-  DLEXT (http://www.linuxfromscratch.org/patches/blfs/svn/pulseaudio-11.1-glibc_2.27_fix-1.patch pulseaudio.patch)
-endif ()
 
 #########
 ## zlib
@@ -91,7 +58,7 @@ endif ()
 
 if (WIN32)
   ExternalProject_Add (zlib_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
+    URL http://www.zlib.net/zlib-1.2.11.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND
     BUILD_COMMAND ${CMD} make -fwin32/Makefile.gcc
@@ -101,12 +68,12 @@ if (WIN32)
   )
 else ()
   ExternalProject_Add (zlib_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
+    URL http://www.zlib.net/zlib-1.2.11.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --static
-    BUILD_COMMAND ${CMD} make
+    BUILD_COMMAND ${CMD} make libz.a # don't make test programs
     INSTALL_COMMAND ${CMD} make install
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
@@ -118,7 +85,7 @@ endif ()
 #########
 
 ExternalProject_Add (argagg_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg.tar.gz
+  URL https://github.com/vietjtnguyen/argagg/archive/0.4.6.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR} ${ADDITIONAL_CMAKE_OPTIONS}
 )
@@ -128,9 +95,9 @@ ExternalProject_Add (argagg_Project
 ##########
 
 ExternalProject_Add (libcurl_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl.tar.xz
+  URL https://curl.haxx.se/download/curl-7.55.0.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -183,9 +150,9 @@ ExternalProject_Add (libcurl_Project
 
 if (NOT APPLE)
   ExternalProject_Add (libiconv_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libiconv.tar.gz
+    URL https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -207,9 +174,9 @@ if (NOT APPLE)
 endif ()
 
 ExternalProject_Add (gettext_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/gettext.tar.xz
+  URL http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND cd gettext-runtime && ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND cd gettext-runtime && ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -226,9 +193,9 @@ ExternalProject_Add (gettext_Project
 #########
 
 ExternalProject_Add (libpng_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libpng.tar.xz
+  URL http://prdownloads.sourceforge.net/libpng/libpng-1.6.28.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -244,20 +211,8 @@ ExternalProject_Add (libpng_Project
 ## FFmpeg
 #########
 
-if (ANDROID)
-  set (ADDITIONAL_FFMPEG_CONFIGURE_OPTIONS
-    --enable-cross-compile
-    --target-os=android
-    --arch=${ANDROID_SYSROOT_ABI}
-    --cross-prefix=${CMAKE_BINARY_DIR}/toolchain/bin/${ANDROID_HEADER_TRIPLE}-)
-    # TODO: We should really be using clang (gcc is deprecated in android NDK) but it doesn't work :(
-    # Try building with:
-    #--toolchain=clang-usan
-    #--as=${CMAKE_BINARY_DIR}/toolchain/bin/${ANDROID_HEADER_TRIPLE}-gcc # Workaround for missing as in clang, looks quite stupid but it works
-endif ()
-
 ExternalProject_Add (FFmpeg_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/ffmpeg.tar.xz
+  URL http://www.ffmpeg.org/releases/ffmpeg-3.2.4.tar.xz
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
@@ -266,7 +221,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-iconv
     --disable-programs
     --disable-doc
-    --disable-x86asm
+    --disable-yasm
     --disable-avdevice
     --disable-avfilter
     --disable-network
@@ -293,12 +248,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-libxcb-shm
     --disable-libxcb-xfixes
     --disable-libxcb-shape
-<<<<<<< HEAD
-    --disable-jack
-    --disable-sndio
-=======
-    ${ADDITIONAL_FFMPEG_CONFIGURE_OPTIONS}
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
+    ${ADDITIONAL_CONFIGURE_OPTIONS}
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
@@ -311,9 +261,9 @@ ExternalProject_Add (FFmpeg_Project
 
 if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libasound_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/alsa-lib.tar.bz2
+    URL ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -327,78 +277,15 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
   )
 endif ()
 
-#########
-## libogg
-#########
-
-ExternalProject_Add (libogg_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libogg.tar.xz
-  PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${CMD} ./configure
-    --prefix=${CMAKE_BINARY_DIR}
-    --disable-shared
-    --enable-static
-  BUILD_COMMAND ${CMD} make
-  INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
-  BUILD_IN_SOURCE 1
-  INSTALL_DIR ${CMAKE_BINARY_DIR}
-)
-
-############
-## libvorbis
-############
-
-ExternalProject_Add (libvorbis_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis.tar.xz
-  PREFIX ${CMAKE_BINARY_DIR}
-  CONFIGURE_COMMAND ${CMD} ./configure
-    --prefix=${CMAKE_BINARY_DIR}
-    --disable-shared
-    --enable-static
-  BUILD_COMMAND ${CMD} make
-  INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
-  BUILD_IN_SOURCE 1
-  INSTALL_DIR ${CMAKE_BINARY_DIR}
-  DEPENDS libogg_Project
-)
-
-#############
-## libsndfile
-#############
-
-if (UNIX AND NOT APPLE)
-  ExternalProject_Add (libsndfile_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile.tar.gz
-    PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${CMD} ./configure
-      --prefix=${CMAKE_BINARY_DIR}
-      --disable-shared
-      --enable-static
-      --enable-alsa
-      --disable-sqlite
-      --disable-octave
-      --disable-full-suite
-    BUILD_COMMAND ${CMD} make
-    INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
-    BUILD_IN_SOURCE 1
-    INSTALL_DIR ${CMAKE_BINARY_DIR}
-    DEPENDS libasound_Project libogg_Project libvorbis_Project
-  )
-endif ()
-
 ###########
 ## libpulse
 ###########
 
 if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libpulse_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
+    URL https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.0.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
-<<<<<<< HEAD
-    CONFIGURE_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.patch && ${CMD} ./configure
-=======
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
@@ -441,7 +328,7 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
     INSTALL_COMMAND ${CMD} make install INSTALLDIR=${CMAKE_BINARY_DIR}
     BUILD_IN_SOURCE 1
     INSTALL_DIR ${CMAKE_BINARY_DIR}
-    DEPENDS libasound_Project libsndfile_Project
+    DEPENDS libasound_Project
   )
 endif ()
 
@@ -461,9 +348,7 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
                       --disable-sndio
                       --disable-sndio-shared
                       --enable-pulseaudio
-                      --disable-pulseaudio-shared
-                      --disable-jack
-                      --disable-jack-shared)
+                      --disable-pulseaudio-shared)
 elseif (MINGW)
   set (SDL2_CONFIGURE --enable-directx
                       --enable-render-d3d
@@ -472,7 +357,13 @@ elseif (APPLE)
   set (SDL2_CONFIGURE --enable-video-opengl
                       --enable-video-cocoa)
 elseif (ANDROID)
-  set (SDL2_CONFIGURE --disable-pulseaudio)
+  set (SDL2_CONFIGURE --disable-video-x11
+                      --disable-video-wayland
+                      --disable-video-mir
+                      --disable-oss
+                      --disable-alsa
+                      --disable-sndio
+                      --disable-pulseaudio)
 endif ()
 
 set (SDL2_DEPENDS zlib_Project)
@@ -481,14 +372,13 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
 endif ()
 
 ExternalProject_Add (SDL2_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2.tar.bz2
+  URL http://hg.libsdl.org/SDL/archive/3d0bbfe683a8.tar.bz2
   PREFIX ${CMAKE_BINARY_DIR}
   CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
-    #--disable-joystick
-    --enable-joystick # TODO: Default SDL2 android skeleton requires joystick to build, could be probably fixed by commenting out some things
+    --disable-joystick
     --disable-haptic
     ${SDL2_CONFIGURE}
     ${ADDITIONAL_CONFIGURE_OPTIONS}
@@ -504,15 +394,13 @@ ExternalProject_Add (SDL2_Project
 #############
 
 ExternalProject_Add (SDL2_image_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_image.tar.gz
+  URL https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
-  # SDL_MAIN_HANDLED fixes test program linking on Android
-  # TODO: Is there a better way to handle this?
-  CONFIGURE_COMMAND CFLAGS=-DSDL_MAIN_HANDLED ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
-    --disable-sdltest
+    --disable-sdl-test
     --disable-bmp
     --disable-gif
     --disable-jpg
@@ -542,17 +430,15 @@ ExternalProject_Add (SDL2_image_Project
 ## SDL2_mixer
 #############
 
-set (SDL2_mixer_DEPENDS SDL2_Project libogg_Project libvorbis_Project)
+set (SDL2_mixer_DEPENDS SDL2_Project)
 if (NOT APPLE)
   set (SDL2_mixer_DEPENDS ${SDL2_mixer_DEPENDS} libiconv_Project)
 endif ()
 
 ExternalProject_Add (SDL2_mixer_Project
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_mixer.tar.gz
+  URL https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz
   PREFIX ${CMAKE_BINARY_DIR}
-  # SDL_MAIN_HANDLED fixes test program linking on Android
-  # TODO: Is there a better way to handle this?
-  CONFIGURE_COMMAND CFLAGS=-DSDL_MAIN_HANDLED ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
+  CONFIGURE_COMMAND ${CMD} ./configure
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
@@ -569,7 +455,7 @@ ExternalProject_Add (SDL2_mixer_Project
     --enable-music-midi-native
     --disable-music-midi-fluidsynth
     --disable-music-midi-fluidsynth-shared
-    --enable-music-ogg
+    --disable-music-ogg
     --disable-music-ogg-tremor
     --disable-music-ogg-shared
     --disable-music-flac
@@ -596,10 +482,8 @@ ExternalProject_Add (SDL_kitchensink_Project
   DOWNLOAD_COMMAND ""
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/SDL_kitchensink
   PREFIX ${CMAKE_BINARY_DIR}
-  CMAKE_COMMAND ${CMD} ${CMAKE_COMMAND}
-  CMAKE_ARGS -DDISABLE_SHARED=true
-             -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-             ${ADDITIONAL_CMAKE_OPTIONS}
+  CMAKE_COMMAND ${CMD} cmake
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> ${ADDITIONAL_CMAKE_OPTIONS}
   INSTALL_DIR ${CMAKE_BINARY_DIR}
   BUILD_ALWAYS 1
   DEPENDS SDL2_Project FFmpeg_Project
@@ -639,18 +523,9 @@ set (planetblupi_DEPS
   SDL_kitchensink_Project
   libpng_Project
   gettext_Project
-  libvorbis_Project
 )
-<<<<<<< HEAD
-if (UNIX AND NOT APPLE)
-  list (APPEND planetblupi_DEPS
-    libasound_Project
-    libpulse_Project
-  )
-=======
 if (UNIX AND NOT APPLE AND NOT ANDROID)
   list (APPEND planetblupi_DEPS libasound_Project libpulse_Project)
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
 endif ()
 
 ExternalProject_Add (planetblupi_Project
@@ -658,12 +533,11 @@ ExternalProject_Add (planetblupi_Project
   DOWNLOAD_COMMAND ""
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/planetblupi
   PREFIX ${CMAKE_BINARY_DIR}
-  CMAKE_COMMAND ${CMD} ${CMAKE_COMMAND}
+  CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
              -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-             -DPB_HTTP_VERSION_CHECK=yes
              -DSTATIC_BUILD=${STATIC_BUILD}
              -DSIGN_APP=${SIGN_APP}
              -DANDROID=${ANDROID}
@@ -674,20 +548,18 @@ ExternalProject_Add (planetblupi_Project
 )
 
 if (ANDROID)
-    #find_package (PkgConfig REQUIRED)
-    #pkg_search_module (SDL2 REQUIRED sdl2)
-
+    find_package (PkgConfig REQUIRED)
+    pkg_search_module (SDL2 REQUIRED sdl2)
     add_library(main SHARED android/SDL_android_main.c)
-    add_dependencies (main planetblupi_Project)
-    target_link_libraries (main PUBLIC planetblupi)
-
-    #add_dependencies (main SDL2_Project)
-    target_link_libraries (main PUBLIC -lintl -liconv -lSDL2 -lSDL2_image -lSDL2_mixer -lcurl -lSDL_kitchensink_static -lpng -lavformat -lavcodec -lavutil -lswscale -lswresample -lz -lGLESv1_CM -lGLESv2 -llog -landroid ${CMAKE_CXX_STANDARD_LIBRARIES_INIT})
+    #add_dependencies(main planetblupi_Project SDL2_Project)
+    add_dependencies(main SDL2_Project)
+    #target_link_libraries (main PUBLIC ${CMAKE_BINARY_DIR}/bin/libplanetblupi.a)
+    target_link_libraries(main PUBLIC ${SDL2_STATIC_LIBRARIES})
 endif ()
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
-set (CPACK_SOURCE_GENERATOR "TXZ")
+set (CPACK_SOURCE_GENERATOR "TBZ2")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "planetblupi-dev")
-set (CPACK_SOURCE_IGNORE_FILES "/build/;/Debug/;/Release/;/planetblupi-data/;/planetblupi-www/;/.git/;~$;${CPACK_SOURCE_IGNORE_FILES}")
+set (CPACK_SOURCE_IGNORE_FILES "/build/;/Debug/;/Release/;/.git/;~$;${CPACK_SOURCE_IGNORE_FILES}")
 include (CPack)
