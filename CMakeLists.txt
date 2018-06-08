@@ -366,7 +366,7 @@ ExternalProject_Add (libvorbis_Project
 ## libsndfile
 #############
 
-if (UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libsndfile_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
