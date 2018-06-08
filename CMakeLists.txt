@@ -468,7 +468,9 @@ elseif (APPLE)
   set (SDL2_CONFIGURE --enable-video-opengl
                       --enable-video-cocoa)
 elseif (ANDROID)
-  set (SDL2_CONFIGURE --disable-pulseaudio)
+  set (SDL2_CONFIGURE --disable-pulseaudio
+                      --disable-jack
+                      --disable-jack-shared)
 endif ()
 
 set (SDL2_DEPENDS zlib_Project)
