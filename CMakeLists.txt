@@ -641,16 +641,11 @@ set (planetblupi_DEPS
   gettext_Project
   libvorbis_Project
 )
-<<<<<<< HEAD
-if (UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE AND NOT ANDROID)
   list (APPEND planetblupi_DEPS
     libasound_Project
     libpulse_Project
   )
-=======
-if (UNIX AND NOT APPLE AND NOT ANDROID)
-  list (APPEND planetblupi_DEPS libasound_Project libpulse_Project)
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
 endif ()
 
 ExternalProject_Add (planetblupi_Project
