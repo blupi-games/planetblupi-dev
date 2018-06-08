@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "org.libsdl.app"
         minSdkVersion 19
@@ -17,7 +17,7 @@ android {
             }
         }
         ndk {
-            abiFilters 'armeabi'
+            abiFilters 'armeabi-v7a'
         }
     }
     buildTypes {
