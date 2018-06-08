@@ -293,12 +293,9 @@ ExternalProject_Add (FFmpeg_Project
     --disable-libxcb-shm
     --disable-libxcb-xfixes
     --disable-libxcb-shape
-<<<<<<< HEAD
     --disable-jack
     --disable-sndio
-=======
     ${ADDITIONAL_FFMPEG_CONFIGURE_OPTIONS}
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
   BUILD_COMMAND ${CMD} make
   INSTALL_COMMAND ${CMD} make install
   BUILD_IN_SOURCE 1
@@ -394,11 +391,7 @@ if (UNIX AND NOT APPLE AND NOT ANDROID)
   ExternalProject_Add (libpulse_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
-<<<<<<< HEAD
-    CONFIGURE_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.patch && ${CMD} ./configure
-=======
-    CONFIGURE_COMMAND ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
->>>>>>> a1e010aedc6ba20f1c5af0592d4576669fe2e2ab
+    CONFIGURE_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.patch && ${ADDITIONAL_TOOL_OPTIONS} ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
