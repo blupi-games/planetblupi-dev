@@ -487,7 +487,6 @@ ExternalProject_Add (SDL2_Project
     --enable-static
     #--disable-joystick
     --enable-joystick # TODO: Default SDL2 android skeleton requires joystick to build, could be probably fixed by commenting out some things
-    --disable-haptic
     ${SDL2_CONFIGURE}
     ${ADDITIONAL_CONFIGURE_OPTIONS}
   BUILD_COMMAND ${CMD} make
