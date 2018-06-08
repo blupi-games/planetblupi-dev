@@ -51,6 +51,9 @@ if (ANDROID)
   )
   set (CMD_PATH "${CMAKE_BINARY_DIR}/toolchain/bin")
   set (CMD_CHOST "${ANDROID_HEADER_TRIPLE}")
+
+  set (CMD_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib")
+  set (CMD_CPPFLAGS "-I${CMAKE_BINARY_DIR}/include")
 endif()
 
 configure_file (cmd.sh.in cmd.sh @ONLY)
