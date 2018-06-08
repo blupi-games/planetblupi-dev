@@ -450,7 +450,7 @@ ExternalProject_Add (SDL2_image_Project
     --prefix=${CMAKE_BINARY_DIR}
     --disable-shared
     --enable-static
-    --disable-sdl-test
+    --disable-sdltest
     --disable-bmp
     --disable-gif
     --disable-jpg
