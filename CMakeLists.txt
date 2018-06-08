@@ -669,7 +669,7 @@ if (ANDROID)
     #find_package (PkgConfig REQUIRED)
     #pkg_search_module (SDL2 REQUIRED sdl2)
 
-    add_library (main STATIC android/SDL_android_main.c)
+    add_library(main SHARED android/SDL_android_main.c)
     add_dependencies (main planetblupi_Project)
     target_link_libraries (main PUBLIC planetblupi)
 
