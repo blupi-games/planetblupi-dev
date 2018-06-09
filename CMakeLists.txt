@@ -666,17 +666,17 @@ ExternalProject_Add (planetblupi_Project
 )
 
 if (ANDROID)
-  set (ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/lib/pkgconfig")
+  #set (ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/lib/pkgconfig")
 
-  find_package (PkgConfig REQUIRED)
-  pkg_search_module (SDL2 REQUIRED sdl2)
+  #find_package (PkgConfig REQUIRED)
+  #pkg_search_module (SDL2 REQUIRED sdl2)
 
   add_library (main SHARED android/SDL_android_main.c)
   add_dependencies (main planetblupi_Project)
   target_link_libraries (main PUBLIC planetblupi)
 
-  add_dependencies (main SDL2_Project)
-  target_link_libraries (main PUBLIC -lintl -liconv -lSDL2 -lSDL2_image -lSDL2_mixer -lcurl -lSDL_kitchensink_static -lpng -lavformat -lavcodec -lavutil -lswscale -lswresample -lz -lGLESv1_CM -lGLESv2 -llog -landroid ${CMAKE_CXX_STANDARD_LIBRARIES_INIT})
+  #add_dependencies (main SDL2_Project)
+  target_link_libraries (main PUBLIC -Wl,--whole-archive -lplanetblupi -Wl,--no-whole-archive -lintl -liconv -lSDL2 -lSDL2_image -lSDL2_mixer -lcurl -lSDL_kitchensink_static -lpng -lavformat -lavcodec -lavutil -lswscale -lswresample -lz -lGLESv1_CM -lGLESv2 -llog -landroid ${CMAKE_CXX_STANDARD_LIBRARIES_INIT})
 endif ()
 
 add_custom_target (dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
