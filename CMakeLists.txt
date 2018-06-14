@@ -276,7 +276,7 @@ ExternalProject_Add (FFmpeg_Project
     --disable-everything
     --enable-decoder=cinepak,msvideo1,vorbis
     --enable-demuxer=matroska
-    --enable-protocol=file
+    --enable-protocol=file,pipe
     --disable-crystalhd
     --disable-xvmc
     --disable-vaapi
