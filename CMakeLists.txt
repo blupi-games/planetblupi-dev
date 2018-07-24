@@ -640,6 +640,8 @@ if (HAS_SDLIMAGE)
     INSTALL_DIR ${CMAKE_BINARY_DIR}
     DEPENDS SDL2_Project libpng_Project
   )
+
+  set (planetblupi_DEPS ${planetblupi_DEPS} SDL2_image_Project)
 endif ()
 
 #############
@@ -697,6 +699,8 @@ if (HAS_SDLMIXER)
     INSTALL_DIR ${CMAKE_BINARY_DIR}
     DEPENDS ${SDL2_mixer_DEPENDS}
   )
+
+  set (planetblupi_DEPS ${planetblupi_DEPS} SDL2_mixer_Project)
 endif ()
 
 ##################
