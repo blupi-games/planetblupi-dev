@@ -8,6 +8,7 @@ link_directories (${CMAKE_BINARY_DIR}/lib)
 
 option (STATIC_BUILD "Build Planet Blupi statically" ON)
 option (EMSCRIPTEN "Build Planet Blupi for emscripten toolchain" OFF)
+option (ASMJS "Build for asm.js instead of WebAssembly (slower)" OFF)
 
 if (EMSCRIPTEN)
   set (BUILD_JS ON)
@@ -39,6 +40,9 @@ elseif (BUILD_JS)
   set (EMSCRIPTEN_FLAGS
    "-s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=['png'] -s USE_OGG=1 -s USE_VORBIS=1 -s TOTAL_MEMORY=256MB -s WASM=1"
   )
+  if (ASMJS)
+    set (EMSCRIPTEN_FLAGS "${EMSCRIPTEN_FLAGS} -s WASM=0")
+  endif ()
   set (CMD_CXXFLAGS ${EMSCRIPTEN_FLAGS})
   set (CMD_CFLAGS ${EMSCRIPTEN_FLAGS})
   set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${EMSCRIPTEN_FLAGS})
