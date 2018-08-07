@@ -6,7 +6,7 @@ export LIBRARY_PATH="@CMAKE_BINARY_DIR@/lib"
 export BINARY_PATH="@CMAKE_BINARY_DIR@/bin"
 export CPPFLAGS="$CPPFLAGS -I$INCLUDE_PATH"
 
-if [ "@ISAPPLE@" = "1" ]; then
+if [ "@APPLE@" = "1" ]; then
   export LDFLAGS="$LDFLAGS @CMD_LDFLAGS@"
   export CXXFLAGS="$CXXFLAGS @CMD_CXXFLAGS@"
   export CFLAGS="$CFLAGS @CMD_CFLAGS@"
