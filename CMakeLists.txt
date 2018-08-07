@@ -202,7 +202,10 @@ if (HAS_ARGAGG)
   ExternalProject_Add (argagg_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
-    CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}"
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}
+               -DARGAGG_BUILD_EXAMPLES=off
+               -DARGAGG_BUILD_TESTS=off
+               -DARGAGG_BUILD_DOCS=off
   )
 
   set (planetblupi_DEPS ${planetblupi_DEPS} argagg_Project)
