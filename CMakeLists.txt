@@ -107,8 +107,7 @@ if (BUILD_LINUX)
   set (HAS_ALSA ON)
   DLEXT (http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz libsndfile.tar.gz)
   set (HAS_SNDFILE ON)
-  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-11.1.tar.xz pulseaudio.tar.xz)
-  DLEXT (http://www.linuxfromscratch.org/patches/blfs/svn/pulseaudio-11.1-glibc_2.27_fix-1.patch pulseaudio.patch)
+  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-12.2.tar.xz pulseaudio.tar.xz)
   set (HAS_PULSEAUDIO ON)
 endif ()
 
@@ -501,7 +500,7 @@ if (HAS_PULSEAUDIO)
   ExternalProject_Add (libpulse_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.patch && ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
