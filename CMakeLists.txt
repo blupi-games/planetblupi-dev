@@ -66,49 +66,74 @@ endmacro (DLEXT)
 
 set (HAS_KITCHENSINK ON)
 
-DLEXT (https://github.com/vietjtnguyen/argagg/archive/0.4.6.tar.gz argagg.tar.gz)
 set (HAS_ARGAGG ON)
-DLEXT (http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.xz ffmpeg.tar.xz)
-set (HAS_FFMPEG ON)
+set (ARGAGG_VER 0.4.6)
+DLEXT (https://github.com/vietjtnguyen/argagg/archive/${ARGAGG_VER}.tar.gz argagg-${ARGAGG_VER}.tar.gz)
 
-if (BUILD_JS)
-  DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.1.tar.gz SDL2_mixer.tar.gz)
-else ()
-  DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.2.tar.gz SDL2_mixer.tar.gz)
-endif ()
+set (HAS_FFMPEG ON)
+set (FFMPEG_VER 3.4.1)
+DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPEG_VER}.tar.xz)
+
 set (HAS_SDLMIXER ON)
+if (BUILD_JS)
+  set (SDLMIXER_VER 2.0.1)
+else ()
+  set (SDLMIXER_VER 2.0.2)
+endif ()
+DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
 if (NOT BUILD_JS)
-  DLEXT (http://www.zlib.net/zlib-1.2.11.tar.gz zlib.tar.gz)
   set (HAS_ZLIB ON)
-  DLEXT (https://curl.haxx.se/download/curl-7.55.0.tar.xz curl.tar.xz)
+  set (ZLIB_VER 1.2.11)
+  DLEXT (http://www.zlib.net/zlib-${ZLIB_VER}.tar.gz zlib-${ZLIB_VER}.tar.gz)
+
   set (HAS_CURL ON)
-  DLEXT (http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-0.19.8.1.tar.xz gettext.tar.xz)
+  set (CURL_VER 7.55.0)
+  DLEXT (https://curl.haxx.se/download/curl-${CURL_VER}.tar.xz curl-${CURL_VER}.tar.xz)
+
   set (HAS_GETTEXT ON)
-  DLEXT (ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz libpng.tar.xz)
+  set (GETTEXT_VER 0.19.8.1)
+  DLEXT (http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
+
   set (HAS_PNG ON)
-  DLEXT (http://downloads.xiph.org/releases/ogg/libogg-1.3.3.tar.xz libogg.tar.xz)
+  set (PNG_VER 1.6.34)
+  DLEXT (ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-${PNG_VER}.tar.xz libpng-${PNG_VER}.tar.xz)
+
   set (HAS_OGG ON)
-  DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.xz libvorbis.tar.xz)
+  set (OGG_VER 1.3.3)
+  DLEXT (http://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz libogg-${OGG_VER}.tar.xz)
+
   set (HAS_VORBIS ON)
-  DLEXT (https://www.libsdl.org/release/SDL2-2.0.8.tar.gz SDL2.tar.bz2)
+  set (VORBIS_VER 1.3.5)
+  DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
+
   set (HAS_SDL ON)
-  DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.3.tar.gz SDL2_image.tar.gz)
+  set (SDL_VER 2.0.8)
+  DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
+
   set (HAS_SDLIMAGE ON)
+  set (SDLIMAGE_VER 2.0.3)
+  DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 endif ()
 
 if (BUILD_LINUX AND BUILD_WINDOWS)
-  DLEXT (https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz libiconv.tar.gz)
   set (HAS_ICONV ON)
+  set (ICONV_VER 1.15)
+  DLEXT (https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VER}.tar.gz libiconv-${ICONV_VER}.tar.gz)
 endif ()
 
 if (BUILD_LINUX)
-  DLEXT (ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.1.4.1.tar.bz2 alsa-lib.tar.bz2)
   set (HAS_ALSA ON)
-  DLEXT (http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz libsndfile.tar.gz)
+  set (ALSA_VER 1.1.4.1)
+  DLEXT (ftp://ftp.alsa-project.org/pub/lib/alsa-lib-${ALSA_VER}.tar.bz2 alsa-lib-${ALSA_VER}.tar.bz2)
+
   set (HAS_SNDFILE ON)
-  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-12.2.tar.xz pulseaudio.tar.xz)
+  set (SNDFILE_VER 1.0.28)
+  DLEXT (http://www.mega-nerd.com/libsndfile/files/libsndfile-${SNDFILE_VER}.tar.gz libsndfile-${SNDFILE_VER}.tar.gz)
+
   set (HAS_PULSEAUDIO ON)
+  set (PULSEAUDIO_VER 12.2)
+  DLEXT (https://freedesktop.org/software/pulseaudio/releases/pulseaudio-${PULSEAUDIO_VER}.tar.xz pulseaudio-${PULSEAUDIO_VER}.tar.xz)
 endif ()
 
 message (STATUS "Build projects for ${PLATFORM}")
@@ -170,7 +195,7 @@ set (planetblupi_DEPS)
 if (HAS_ZLIB)
   if (BUILD_WINDOWS)
     ExternalProject_Add (zlib_Project
-      URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
+      URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib-${ZLIB_VER}.tar.gz
       PREFIX ${CMAKE_BINARY_DIR}
       CONFIGURE_COMMAND
       BUILD_COMMAND ${CMD} make -fwin32/Makefile.gcc
@@ -180,7 +205,7 @@ if (HAS_ZLIB)
     )
   else ()
     ExternalProject_Add (zlib_Project
-      URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib.tar.gz
+      URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/zlib-${ZLIB_VER}.tar.gz
       PREFIX ${CMAKE_BINARY_DIR}
       CONFIGURE_COMMAND ${CMD} ./configure
         --prefix=${CMAKE_BINARY_DIR}
@@ -199,7 +224,7 @@ endif ()
 
 if (HAS_ARGAGG)
   ExternalProject_Add (argagg_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/argagg-${ARGAGG_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}
                -DARGAGG_BUILD_EXAMPLES=off
@@ -221,7 +246,7 @@ if (HAS_CURL)
   endif ()
 
   ExternalProject_Add (libcurl_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/curl-${CURL_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -278,7 +303,7 @@ endif ()
 
 if (HAS_ICONV)
   ExternalProject_Add (libiconv_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libiconv.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libiconv-${ICONV_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -302,7 +327,7 @@ if (HAS_GETTEXT)
   endif ()
 
   ExternalProject_Add (gettext_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/gettext.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/gettext-${GETTEXT_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND cd gettext-runtime && ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -324,7 +349,7 @@ endif ()
 
 if (HAS_PNG)
   ExternalProject_Add (libpng_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libpng.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libpng-${PNG_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -358,7 +383,7 @@ if (HAS_FFMPEG)
   endif ()
 
   ExternalProject_Add (FFmpeg_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/ffmpeg.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/ffmpeg-${FFMPEG_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -410,7 +435,7 @@ endif ()
 
 if (HAS_ALSA)
   ExternalProject_Add (libasound_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/alsa-lib.tar.bz2
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/alsa-lib-${ALSA_VER}.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -433,7 +458,7 @@ endif ()
 
 if (HAS_OGG)
   ExternalProject_Add (libogg_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libogg.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libogg-${OGG_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -452,7 +477,7 @@ endif ()
 
 if (HAS_VORBIS)
   ExternalProject_Add (libvorbis_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis-${VORBIS_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -474,7 +499,7 @@ endif ()
 
 if (HAS_SNDFILE)
   ExternalProject_Add (libsndfile_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libsndfile-${SNDFILE_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -498,7 +523,7 @@ endif ()
 
 if (HAS_PULSEAUDIO)
   ExternalProject_Add (libpulse_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio.tar.xz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/pulseaudio-${PULSEAUDIO_VER}.tar.xz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -595,7 +620,7 @@ if (HAS_SDL)
   endif ()
 
   ExternalProject_Add (SDL2_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2.tar.bz2
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2-${SDL_VER}.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -618,7 +643,7 @@ endif ()
 
 if (HAS_SDLIMAGE)
   ExternalProject_Add (SDL2_image_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_image.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_image-${SDLIMAGE_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
@@ -672,7 +697,7 @@ if (HAS_SDLMIXER)
   endif ()
 
   ExternalProject_Add (SDL2_mixer_Project
-    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_mixer.tar.gz
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_mixer-${SDLMIXER_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
