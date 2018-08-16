@@ -116,7 +116,7 @@ if (NOT BUILD_JS)
   DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 endif ()
 
-if (BUILD_LINUX AND BUILD_WINDOWS)
+if (BUILD_LINUX OR BUILD_WINDOWS)
   set (HAS_ICONV ON)
   set (ICONV_VER 1.15)
   DLEXT (https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VER}.tar.gz libiconv-${ICONV_VER}.tar.gz)
