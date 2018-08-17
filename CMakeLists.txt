@@ -777,11 +777,11 @@ endif ()
 if (BUILD_LINUX)
   set (APPIMAGE_APPRUN_BIN     "AppRun-x86_64")
   set (APPIMAGE_APPRUN_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_APPRUN_BIN}")
-  set (APPIMAGE_APPRUN_PROGRAM "${CMAKE_BINARY_DIR}/bin/${APPIMAGE_APPRUN_BIN}")
+  set (APPIMAGE_APPRUN_PROGRAM "${CMAKE_CURRENT_SOURCE_DIR}/externals/${APPIMAGE_APPRUN_BIN}")
 
   set (APPIMAGE_TOOL_BIN     "appimagetool-x86_64.AppImage")
   set (APPIMAGE_TOOL_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_TOOL_BIN}")
-  set (APPIMAGE_TOOL_PROGRAM "${CMAKE_BINARY_DIR}/bin/${APPIMAGE_TOOL_BIN}")
+  set (APPIMAGE_TOOL_PROGRAM "${CMAKE_CURRENT_SOURCE_DIR}/externals/${APPIMAGE_TOOL_BIN}")
 
   if (NOT EXISTS "${APPIMAGE_APPRUN_PROGRAM}")
     file (DOWNLOAD "${APPIMAGE_APPRUN_URL}" "${APPIMAGE_APPRUN_PROGRAM}")
