@@ -38,7 +38,7 @@ if (BUILD_DARWIN)
   set (CMD_CPPFLAGS "-I${CMAKE_BINARY_DIR}/include")
 elseif (BUILD_JS)
   set (EMSCRIPTEN_FLAGS
-   "-s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=['png'] -s USE_OGG=1 -s USE_VORBIS=1 -s TOTAL_MEMORY=256MB"
+   "-s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_OGG=1 -s USE_VORBIS=1 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=['png'] -s USE_SDL_MIXER=2 -s TOTAL_MEMORY=256MB"
   )
   if (ASMJS)
     set (EMSCRIPTEN_FLAGS "${EMSCRIPTEN_FLAGS} -s WASM=0")
@@ -74,15 +74,11 @@ set (HAS_FFMPEG ON)
 set (FFMPEG_VER 3.4.1)
 DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPEG_VER}.tar.xz)
 
-set (HAS_SDLMIXER ON)
-if (BUILD_JS)
-  set (SDLMIXER_VER 2.0.1)
-else ()
-  set (SDLMIXER_VER 2.0.2)
-endif ()
-DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
-
 if (NOT BUILD_JS)
+  set (HAS_SDLMIXER ON)
+  set (SDLMIXER_VER 2.0.2)
+  DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
+
   set (HAS_ZLIB ON)
   set (ZLIB_VER 1.2.11)
   DLEXT (http://www.zlib.net/zlib-${ZLIB_VER}.tar.gz zlib-${ZLIB_VER}.tar.gz)
