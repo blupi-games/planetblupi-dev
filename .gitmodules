@@ -1,12 +1,12 @@
 [submodule "planetblupi"]
 	path = planetblupi
-	url = https://github.com/blupi-games/planetblupi.git
+	url = ../planetblupi.git
 [submodule "SDL_kitchensink"]
 	path = SDL_kitchensink
-	url = https://github.com/blupi-games/SDL_kitchensink.git
+	url = ../SDL_kitchensink.git
 [submodule "planetblupi-data"]
 	path = planetblupi-data
-	url = https://github.com/blupi-games/planetblupi-data.git
+	url = ../planetblupi-data.git
 [submodule "planetblupi-www"]
 	path = planetblupi-www
-	url = https://github.com/blupi-games/planetblupi-www.git
+	url = ../planetblupi-www.git
