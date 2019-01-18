@@ -1,5 +1,7 @@
 # Planet Blupi development bundle
 
+![blupi](blupi.png)
+
 This bundle is the main repository for building the _Planet Blupi_ game. If
 you are an official distribution packager, maybe you can directly use the
 `https://github.com/blupi-games/planetblupi.git` repository instead of this
@@ -37,9 +39,9 @@ The source-code is written in C++, only [GCC][4] and [Clang][5] are officially
 supported. The clone must be `recursive` because the development use git
 submodules.
 
-* **source-code**: `planetblupi/`
-* **source-assets**: `planetblupi-data/`
-* **website**: `planetblupi-www/` (see <http://www.blupi.org>)
+- **source-code**: `planetblupi/`
+- **source-assets**: `planetblupi-data/`
+- **website**: `planetblupi-www/` (see <http://www.blupi.org>)
 
 ### Linux
 
@@ -109,9 +111,9 @@ make -j
 If you have built a release, you will find the output in the appropriate
 directory according to the platform.
 
-* **Linux**: look at `Release/linux-appimage/planetblupi.AppImage`
-* **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
-* **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
+- **Linux**: look at `Release/linux-appimage/planetblupi.AppImage`
+- **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
+- **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
 
 # Licenses
 
