@@ -71,12 +71,12 @@ set (ARGAGG_VER 0.4.6)
 DLEXT (https://github.com/vietjtnguyen/argagg/archive/${ARGAGG_VER}.tar.gz argagg-${ARGAGG_VER}.tar.gz)
 
 set (HAS_FFMPEG ON)
-set (FFMPEG_VER 3.4.1)
+set (FFMPEG_VER 4.1.1)
 DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPEG_VER}.tar.xz)
 
 if (NOT BUILD_JS)
   set (HAS_SDLMIXER ON)
-  set (SDLMIXER_VER 2.0.2)
+  set (SDLMIXER_VER 2.0.4)
   DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
   set (HAS_ZLIB ON)
@@ -84,31 +84,31 @@ if (NOT BUILD_JS)
   DLEXT (http://www.zlib.net/zlib-${ZLIB_VER}.tar.gz zlib-${ZLIB_VER}.tar.gz)
 
   set (HAS_CURL ON)
-  set (CURL_VER 7.55.0)
+  set (CURL_VER 7.64.0)
   DLEXT (https://curl.haxx.se/download/curl-${CURL_VER}.tar.xz curl-${CURL_VER}.tar.xz)
 
   set (HAS_GETTEXT ON)
   set (GETTEXT_VER 0.19.8.1)
-  DLEXT (http://mirror.switch.ch/ftp/mirror/gnu/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
+  DLEXT (http://ftp.thunix.cf/gnu-ftp/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
 
   set (HAS_PNG ON)
-  set (PNG_VER 1.6.34)
-  DLEXT (ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-${PNG_VER}.tar.xz libpng-${PNG_VER}.tar.xz)
+  set (PNG_VER 1.6.36)
+  DLEXT (https://download.sourceforge.net/libpng/libpng-${PNG_VER}.tar.xz libpng-${PNG_VER}.tar.xz)
 
   set (HAS_OGG ON)
   set (OGG_VER 1.3.3)
   DLEXT (http://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz libogg-${OGG_VER}.tar.xz)
 
   set (HAS_VORBIS ON)
-  set (VORBIS_VER 1.3.5)
+  set (VORBIS_VER 1.3.6)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.0.8)
+  set (SDL_VER 2.0.9)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
-  set (SDLIMAGE_VER 2.0.3)
+  set (SDLIMAGE_VER 2.0.4)
   DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 endif ()
 
@@ -120,7 +120,7 @@ endif ()
 
 if (BUILD_LINUX)
   set (HAS_ALSA ON)
-  set (ALSA_VER 1.1.4.1)
+  set (ALSA_VER 1.1.8)
   DLEXT (ftp://ftp.alsa-project.org/pub/lib/alsa-lib-${ALSA_VER}.tar.bz2 alsa-lib-${ALSA_VER}.tar.bz2)
 
   set (HAS_SNDFILE ON)
@@ -401,7 +401,6 @@ if (HAS_FFMPEG)
       --disable-vaapi
       --disable-videotoolbox
       --disable-vdpau
-      --disable-vda
       --disable-nvenc
       --disable-dxva2
       --disable-d3d11va
@@ -415,7 +414,6 @@ if (HAS_FFMPEG)
       --disable-libxcb-shm
       --disable-libxcb-xfixes
       --disable-libxcb-shape
-      --disable-jack
       --disable-sndio
       ${FFMPEG_CONFIGURE}
     BUILD_COMMAND ${CMD} make
