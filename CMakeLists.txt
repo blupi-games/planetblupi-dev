@@ -269,6 +269,7 @@ if (HAS_CURL)
       --disable-sspi
       --disable-ntlm-wb
       --disable-unix-socket
+      --without-brotli
       --without-winssl
       --without-darwinssl
       --without-ssl
