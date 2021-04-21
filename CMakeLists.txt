@@ -9,6 +9,7 @@ link_directories (${CMAKE_BINARY_DIR}/lib)
 option (STATIC_BUILD "Build Planet Blupi statically" ON)
 option (EMSCRIPTEN "Build Planet Blupi for emscripten toolchain" OFF)
 option (ASMJS "Build for asm.js instead of WebAssembly (slower)" OFF)
+option (DISABLE_APPIMAGE "Disable AppImage generation" OFF)
 
 if (EMSCRIPTEN)
   set (BUILD_JS ON)
@@ -769,7 +770,7 @@ endif ()
 ## planetblupi
 ##############
 
-if (BUILD_LINUX)
+if (BUILD_LINUX AND NOT DISABLE_APPIMAGE)
   set (APPIMAGE_APPRUN_BIN     "AppRun-x86_64")
   set (APPIMAGE_APPRUN_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_APPRUN_BIN}")
   set (APPIMAGE_APPRUN_PROGRAM "${CMAKE_CURRENT_SOURCE_DIR}/externals/${APPIMAGE_APPRUN_BIN}")
