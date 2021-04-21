@@ -90,7 +90,7 @@ if (NOT BUILD_JS)
 
   set (HAS_GETTEXT ON)
   set (GETTEXT_VER 0.19.8.1)
-  DLEXT (http://ftp.thunix.cf/gnu-ftp/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
+  DLEXT (http://ftp.gnu.org/pub/gnu/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
 
   set (HAS_PNG ON)
   set (PNG_VER 1.6.36)
