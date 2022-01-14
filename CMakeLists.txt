@@ -105,11 +105,11 @@ if (NOT BUILD_JS)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.0.9)
+  set (SDL_VER 2.0.20)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
-  set (SDLIMAGE_VER 2.0.4)
+  set (SDLIMAGE_VER 2.0.5)
   DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 endif ()
 
