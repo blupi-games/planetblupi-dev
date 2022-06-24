@@ -1,6 +1,8 @@
 
 cmake_minimum_required (VERSION 3.2)
 
+set (CMAKE_GENERATOR "Unix Makefiles" CACHE INTERNAL "" FORCE)
+
 include (${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
 include_directories (${CMAKE_BINARY_DIR}/include)
