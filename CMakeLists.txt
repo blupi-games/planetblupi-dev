@@ -111,6 +111,10 @@ if (NOT BUILD_JS)
   set (HAS_SDLIMAGE ON)
   set (SDLIMAGE_VER 2.0.5)
   DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
+
+  set (HAS_SDLTTF ON)
+  set (SDLTTF_VER 2.0.18)
+  DLEXT (https://github.com/libsdl-org/SDL_ttf/archive/refs/tags/release-${SDLTTF_VER}.tar.gz SDL2_ttf-${SDLTTF_VER}.tar.gz)
 endif ()
 
 if (BUILD_LINUX OR BUILD_WINDOWS)
@@ -163,6 +167,9 @@ if (HAS_SDLIMAGE)
 endif ()
 if (HAS_SDLMIXER)
   message (STATUS " * SDL2_mixer (${SDLMIXER_VER})")
+endif ()
+if (HAS_SDLTTF)
+  message (STATUS " * SDL2_ttf (${SDLTTF_VER})")
 endif ()
 if (HAS_KITCHENSINK)
   message (STATUS " * SDL_kitchensink")
@@ -730,6 +737,33 @@ if (HAS_SDLMIXER)
   )
 
   set (planetblupi_DEPS ${planetblupi_DEPS} SDL2_mixer_Project)
+endif ()
+
+#############
+## SDL2_ttf
+#############
+
+if (HAS_SDLTTF)
+  ExternalProject_Add (SDL2_ttf_Project
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_ttf-${SDLTTF_VER}.tar.gz
+    PREFIX ${CMAKE_BINARY_DIR}
+    CONFIGURE_COMMAND ${CMD} ./configure
+      --prefix=${CMAKE_BINARY_DIR}
+      --disable-shared
+      --enable-static
+      --disable-sdltest
+      --enable-freetype-builtin
+      --disable-freetypetest
+      --enable-harfbuzz
+      --enable-harfbuzz-builtin
+    BUILD_COMMAND ${CMD} make
+    INSTALL_COMMAND ${CMD} make install
+    BUILD_IN_SOURCE 1
+    INSTALL_DIR ${CMAKE_BINARY_DIR}
+    DEPENDS SDL2_Project
+  )
+
+  set (planetblupi_DEPS ${planetblupi_DEPS} SDL2_ttf_Project)
 endif ()
 
 ##################
