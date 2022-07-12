@@ -79,8 +79,8 @@ DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPE
 
 if (NOT BUILD_JS)
   set (HAS_SDLMIXER ON)
-  set (SDLMIXER_VER 2.0.4)
-  DLEXT (https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
+  set (SDLMIXER_VER 2.6.0)
+  DLEXT (https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDLMIXER_VER}/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
   set (HAS_ZLIB ON)
   set (ZLIB_VER 1.2.11)
@@ -107,16 +107,16 @@ if (NOT BUILD_JS)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.0.20)
+  set (SDL_VER 2.0.22)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
-  set (SDLIMAGE_VER 2.0.5)
-  DLEXT (https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
+  set (SDLIMAGE_VER 2.6.0)
+  DLEXT (https://github.com/libsdl-org/SDL_image/releases/download/release-${SDLIMAGE_VER}/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 
   set (HAS_SDLTTF ON)
-  set (SDLTTF_VER 2.0.18)
-  DLEXT (https://github.com/libsdl-org/SDL_ttf/archive/refs/tags/release-${SDLTTF_VER}.tar.gz SDL2_ttf-${SDLTTF_VER}.tar.gz)
+  set (SDLTTF_VER 2.20.0)
+  DLEXT (https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDLTTF_VER}/SDL2_ttf-${SDLTTF_VER}.tar.gz SDL2_ttf-${SDLTTF_VER}.tar.gz)
 endif ()
 
 if (BUILD_LINUX OR BUILD_WINDOWS)
@@ -741,27 +741,23 @@ if (HAS_SDLMIXER)
   set (planetblupi_DEPS ${planetblupi_DEPS} SDL2_mixer_Project)
 endif ()
 
-#############
+###########
 ## SDL2_ttf
-#############
+###########
 
 if (HAS_SDLTTF)
   ExternalProject_Add (SDL2_ttf_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_ttf-${SDLTTF_VER}.tar.gz
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${CMD} ./configure
-      --prefix=${CMAKE_BINARY_DIR}
-      --disable-shared
-      --enable-static
-      --disable-sdltest
-      --enable-freetype-builtin
-      --disable-freetypetest
-      --enable-harfbuzz
-      --enable-harfbuzz-builtin
-    BUILD_COMMAND ${CMD} make
-    INSTALL_COMMAND ${CMD} make install
-    BUILD_IN_SOURCE 1
+    CMAKE_COMMAND ${CMD} cmake
+    CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
+               -DSDL2TTF_SAMPLES=OFF
+               -DSDL2TTF_FREETYPE=ON
+               -DSDL2TTF_HARFBUZZ=ON
+               -DSDL2TTF_VENDORED=ON
+               -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     INSTALL_DIR ${CMAKE_BINARY_DIR}
+    BUILD_ALWAYS 1
     DEPENDS SDL2_Project
   )
 
