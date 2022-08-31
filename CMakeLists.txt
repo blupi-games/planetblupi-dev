@@ -83,8 +83,8 @@ if (NOT BUILD_JS)
   DLEXT (https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDLMIXER_VER}/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
   set (HAS_ZLIB ON)
-  set (ZLIB_VER 1.2.11)
-  DLEXT (http://www.zlib.net/zlib-${ZLIB_VER}.tar.gz zlib-${ZLIB_VER}.tar.gz)
+  set (ZLIB_VER 1.2.12)
+  DLEXT (https://www.zlib.net/zlib-${ZLIB_VER}.tar.gz zlib-${ZLIB_VER}.tar.gz)
 
   set (HAS_CURL ON)
   set (CURL_VER 7.64.0)
