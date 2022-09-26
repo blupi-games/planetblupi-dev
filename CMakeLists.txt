@@ -79,7 +79,7 @@ DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPE
 
 if (NOT BUILD_JS)
   set (HAS_SDLMIXER ON)
-  set (SDLMIXER_VER 2.6.0)
+  set (SDLMIXER_VER 2.6.2)
   DLEXT (https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDLMIXER_VER}/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
   set (HAS_ZLIB ON)
@@ -107,15 +107,15 @@ if (NOT BUILD_JS)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.0.22)
+  set (SDL_VER 2.24.0)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
-  set (SDLIMAGE_VER 2.6.0)
+  set (SDLIMAGE_VER 2.6.2)
   DLEXT (https://github.com/libsdl-org/SDL_image/releases/download/release-${SDLIMAGE_VER}/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 
   set (HAS_SDLTTF ON)
-  set (SDLTTF_VER 2.20.0)
+  set (SDLTTF_VER 2.20.1)
   DLEXT (https://github.com/libsdl-org/SDL_ttf/releases/download/release-${SDLTTF_VER}/SDL2_ttf-${SDLTTF_VER}.tar.gz SDL2_ttf-${SDLTTF_VER}.tar.gz)
 endif ()
 
