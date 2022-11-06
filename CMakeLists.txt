@@ -91,7 +91,7 @@ if (NOT BUILD_JS)
   DLEXT (https://curl.haxx.se/download/curl-${CURL_VER}.tar.xz curl-${CURL_VER}.tar.xz)
 
   set (HAS_GETTEXT ON)
-  set (GETTEXT_VER 0.19.8.1)
+  set (GETTEXT_VER 0.21.1)
   DLEXT (http://ftp.gnu.org/pub/gnu/gettext/gettext-${GETTEXT_VER}.tar.xz gettext-${GETTEXT_VER}.tar.xz)
 
   set (HAS_PNG ON)
