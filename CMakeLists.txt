@@ -107,7 +107,7 @@ if (NOT BUILD_JS)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.24.0)
+  set (SDL_VER 2.24.2)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
