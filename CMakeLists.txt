@@ -12,6 +12,7 @@ option (STATIC_BUILD "Build Planet Blupi statically" ON)
 option (EMSCRIPTEN "Build Planet Blupi for emscripten toolchain" OFF)
 option (ASMJS "Build for asm.js instead of WebAssembly (slower)" OFF)
 option (DISABLE_APPIMAGE "Disable AppImage generation" OFF)
+option (SIGN_APP "Sign the executables" OFF)
 
 if (EMSCRIPTEN)
   set (BUILD_JS ON)
