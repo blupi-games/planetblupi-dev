@@ -1,0 +1,458 @@
+From b44c59734ac43d9091ec78d61c278fdcef80948f Mon Sep 17 00:00:00 2001
+From: Mathieu Schroeter <mathieu@schroetersa.ch>
+Date: Wed, 28 Jun 2023 21:32:51 +0200
+Subject: Rename some functions in order to prevent clash with the linker
+
+
+diff --git a/external/freetype/src/gzip/crc32.c b/external/freetype/src/gzip/crc32.c
+index 2ddc32d..e232595 100644
+--- a/external/freetype/src/gzip/crc32.c
++++ b/external/freetype/src/gzip/crc32.c
+@@ -13,7 +13,7 @@
+   Note on the use of DYNAMIC_CRC_TABLE: there is no mutex or semaphore
+   protection on the static variables used to control the first-use generation
+   of the crc tables. Therefore, if you #define DYNAMIC_CRC_TABLE, you should
+-  first call get_crc_table() to initialize the tables before allowing more than
++  first call _get_crc_table() to initialize the tables before allowing more than
+   one thread to use crc32().
+ 
+   MAKECRCH can be #defined to write out crc32.h. A main() routine is also
+@@ -160,7 +160,7 @@ local void make_crc_table OF((void));
+ /*
+   Define a once() function depending on the availability of atomics. If this is
+   compiled with DYNAMIC_CRC_TABLE defined, and if CRCs will be computed in
+-  multiple threads, and if atomics are not available, then get_crc_table() must
++  multiple threads, and if atomics are not available, then _get_crc_table() must
+   be called to initialize the tables and must return before any threads are
+   allowed to compute or combine CRCs.
+  */
+@@ -583,7 +583,7 @@ local z_crc_t x2nmodp(
+  * This function can be used by asm versions of crc32(), and to force the
+  * generation of the CRC tables in a threaded application.
+  */
+-const z_crc_t FAR * ZEXPORT get_crc_table()
++const z_crc_t FAR * ZEXPORT _get_crc_table()
+ {
+ #ifdef DYNAMIC_CRC_TABLE
+     once(&made, make_crc_table);
+@@ -610,7 +610,7 @@ const z_crc_t FAR * ZEXPORT get_crc_table()
+ #define Z_BATCH_ZEROS 0xa10d3d0c    /* computed from Z_BATCH = 3990 */
+ #define Z_BATCH_MIN 800             /* fewest words in a final batch */
+ 
+-unsigned long ZEXPORT crc32_z(
++unsigned long ZEXPORT _crc32_z(
+     unsigned long crc,
+     const unsigned char FAR *buf,
+     z_size_t len)
+@@ -736,7 +736,7 @@ local z_word_t crc_word_big(
+ #endif
+ 
+ /* ========================================================================= */
+-unsigned long ZEXPORT crc32_z(
++unsigned long ZEXPORT _crc32_z(
+     unsigned long crc,
+     const unsigned char FAR *buf,
+     z_size_t len)
+@@ -1065,11 +1065,11 @@ unsigned long ZEXPORT crc32(
+     const unsigned char FAR *buf,
+     uInt len)
+ {
+-    return crc32_z(crc, buf, len);
++    return _crc32_z(crc, buf, len);
+ }
+ 
+ /* ========================================================================= */
+-uLong ZEXPORT crc32_combine64(
++uLong ZEXPORT _crc32_combine64(
+     uLong crc1,
+     uLong crc2,
+     z_off64_t len2)
+@@ -1081,16 +1081,16 @@ uLong ZEXPORT crc32_combine64(
+ }
+ 
+ /* ========================================================================= */
+-uLong ZEXPORT crc32_combine(
++uLong ZEXPORT _crc32_combine(
+     uLong crc1,
+     uLong crc2,
+     z_off_t len2)
+ {
+-    return crc32_combine64(crc1, crc2, len2);
++    return _crc32_combine64(crc1, crc2, len2);
+ }
+ 
+ /* ========================================================================= */
+-uLong ZEXPORT crc32_combine_gen64(
++uLong ZEXPORT _crc32_combine_gen64(
+     z_off64_t len2)
+ {
+ #ifdef DYNAMIC_CRC_TABLE
+@@ -1100,14 +1100,14 @@ uLong ZEXPORT crc32_combine_gen64(
+ }
+ 
+ /* ========================================================================= */
+-uLong ZEXPORT crc32_combine_gen(
++uLong ZEXPORT _crc32_combine_gen(
+     z_off_t len2)
+ {
+-    return crc32_combine_gen64(len2);
++    return _crc32_combine_gen64(len2);
+ }
+ 
+ /* ========================================================================= */
+-uLong crc32_combine_op(
++uLong _crc32_combine_op(
+     uLong crc1,
+     uLong crc2,
+     uLong op)
+diff --git a/external/freetype/src/gzip/ftzconf.h b/external/freetype/src/gzip/ftzconf.h
+index 5e1d68a..c025551 100644
+--- a/external/freetype/src/gzip/ftzconf.h
++++ b/external/freetype/src/gzip/ftzconf.h
+@@ -36,9 +36,9 @@
+ #    define compressBound         z_compressBound
+ #  endif
+ #  define crc32                 z_crc32
+-#  define crc32_combine         z_crc32_combine
+-#  define crc32_combine64       z_crc32_combine64
+-#  define crc32_z               z_crc32_z
++#  define _crc32_combine         z_crc32_combine
++#  define _crc32_combine64       z_crc32_combine64
++#  define _crc32_z               z_crc32_z
+ #  define deflate               z_deflate
+ #  define deflateBound          z_deflateBound
+ #  define deflateCopy           z_deflateCopy
+@@ -57,7 +57,7 @@
+ #  define deflateSetHeader      z_deflateSetHeader
+ #  define deflateTune           z_deflateTune
+ #  define deflate_copyright     z_deflate_copyright
+-#  define get_crc_table         z_get_crc_table
++#  define _get_crc_table         z_get_crc_table
+ #  ifndef Z_SOLO
+ #    define gz_error              z_gz_error
+ #    define gz_intmax             z_gz_intmax
+@@ -111,17 +111,17 @@
+ #  define inflateInit           z_inflateInit
+ #  define inflateInit2          z_inflateInit2
+ #  define inflateInit2_         z_inflateInit2_
+-#  define inflateInit_          z_inflateInit_
++#  define _inflateInit_          z_inflateInit_
+ #  define inflateMark           z_inflateMark
+ #  define inflatePrime          z_inflatePrime
+ #  define inflateReset          z_inflateReset
+ #  define inflateReset2         z_inflateReset2
+-#  define inflateResetKeep      z_inflateResetKeep
++#  define _inflateResetKeep      z_inflateResetKeep
+ #  define inflateSetDictionary  z_inflateSetDictionary
+ #  define inflateSync           z_inflateSync
+-#  define inflateSyncPoint      z_inflateSyncPoint
+-#  define inflateUndermine      z_inflateUndermine
+-#  define inflateValidate       z_inflateValidate
++#  define _inflateSyncPoint      z_inflateSyncPoint
++#  define _inflateUndermine      z_inflateUndermine
++#  define _inflateValidate       z_inflateValidate
+ #  define inflate_copyright     z_inflate_copyright
+ #  define inflate_fast          z_inflate_fast
+ #  define inflate_table         z_inflate_table
+@@ -520,7 +520,7 @@ typedef uLong FAR uLongf;
+   #pragma map(deflateInit2_,"DEIN2")
+   #pragma map(deflateEnd,"DEEND")
+   #pragma map(deflateBound,"DEBND")
+-  #pragma map(inflateInit_,"ININ")
++  #pragma map(_inflateInit_,"ININ")
+   #pragma map(inflateInit2_,"ININ2")
+   #pragma map(inflateEnd,"INEND")
+   #pragma map(inflateSync,"INSY")
+diff --git a/external/freetype/src/gzip/inflate.c b/external/freetype/src/gzip/inflate.c
+index 5bf5b81..112483b 100644
+--- a/external/freetype/src/gzip/inflate.c
++++ b/external/freetype/src/gzip/inflate.c
+@@ -118,7 +118,7 @@ local int inflateStateCheck(
+     return 0;
+ }
+ 
+-int ZEXPORT inflateResetKeep(
++int ZEXPORT _inflateResetKeep(
+     z_streamp strm)
+ {
+     struct inflate_state FAR *state;
+@@ -154,7 +154,7 @@ int ZEXPORT inflateReset(
+     state->wsize = 0;
+     state->whave = 0;
+     state->wnext = 0;
+-    return inflateResetKeep(strm);
++    return _inflateResetKeep(strm);
+ }
+ 
+ int ZEXPORT inflateReset2(
+@@ -239,7 +239,7 @@ int ZEXPORT inflateInit2_(
+     return ret;
+ }
+ 
+-int ZEXPORT inflateInit_(
++int ZEXPORT _inflateInit_(
+     z_streamp strm,
+     const char *version,
+     int stream_size)
+@@ -1489,7 +1489,7 @@ int ZEXPORT inflateSync(
+    block. When decompressing, PPP checks that at the end of input packet,
+    inflate is waiting for these length bytes.
+  */
+-int ZEXPORT inflateSyncPoint(
++int ZEXPORT _inflateSyncPoint(
+     z_streamp strm)
+ {
+     struct inflate_state FAR *state;
+@@ -1550,7 +1550,7 @@ int ZEXPORT inflateCopy(
+ 
+ #endif  /* !Z_FREETYPE */
+ 
+-int ZEXPORT inflateUndermine(
++int ZEXPORT _inflateUndermine(
+     z_streamp strm,
+     int subvert)
+ {
+@@ -1568,7 +1568,7 @@ int ZEXPORT inflateUndermine(
+ #endif
+ }
+ 
+-int ZEXPORT inflateValidate(
++int ZEXPORT _inflateValidate(
+     z_streamp strm,
+     int check)
+ {
+diff --git a/external/freetype/src/gzip/patches/freetype-zlib.diff b/external/freetype/src/gzip/patches/freetype-zlib.diff
+index 20d8429..d45de43 100644
+--- a/external/freetype/src/gzip/patches/freetype-zlib.diff
++++ b/external/freetype/src/gzip/patches/freetype-zlib.diff
+@@ -80,7 +80,7 @@ index 4375557b4..5bf5b815e 100644
+  
+  local int inflateStateCheck(
+      z_streamp strm)
+-@@ -245,6 +247,8 @@ int ZEXPORT inflateInit_(
++@@ -245,6 +247,8 @@ int ZEXPORT _inflateInit_(
+      return inflateInit2_(strm, DEF_WBITS, version, stream_size);
+  }
+  
+@@ -116,7 +116,7 @@ index 4375557b4..5bf5b815e 100644
+  /*
+     Returns true if inflate is currently at the end of a block generated by
+     Z_SYNC_FLUSH or Z_FULL_FLUSH. This function is used by one PPP
+-@@ -1489,6 +1499,8 @@ int ZEXPORT inflateSyncPoint(
++@@ -1489,6 +1499,8 @@ int ZEXPORT _inflateSyncPoint(
+      return state->mode == STORED && state->bits == 0;
+  }
+  
+@@ -131,10 +131,10 @@ index 4375557b4..5bf5b815e 100644
+  
+ +#endif  /* !Z_FREETYPE */
+ +
+- int ZEXPORT inflateUndermine(
++ int ZEXPORT _inflateUndermine(
+      z_streamp strm,
+      int subvert)
+-@@ -1569,6 +1583,8 @@ int ZEXPORT inflateValidate(
++@@ -1569,6 +1583,8 @@ int ZEXPORT _inflateValidate(
+      return Z_OK;
+  }
+  
+@@ -287,7 +287,7 @@ index 4a98e38bf..d760140c2 100644
+  
+ +#ifndef Z_FREETYPE
+ +
+- ZEXTERN uLong ZEXPORT crc32_z OF((uLong crc, const Bytef *buf,
++ ZEXTERN uLong ZEXPORT _crc32_z OF((uLong crc, const Bytef *buf,
+                                    z_size_t len));
+  /*
+ @@ -1822,6 +1838,19 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
+@@ -316,8 +316,8 @@ index 4a98e38bf..d760140c2 100644
+  
+ +#ifndef Z_FREETYPE
+     ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
+-    ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+-    ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t));
++    ZEXTERN uLong ZEXPORT _crc32_combine OF((uLong, uLong, z_off_t));
++    ZEXTERN uLong ZEXPORT _crc32_combine_gen OF((z_off_t));
+ +#endif
+  
+  #endif /* !Z_SOLO */
+@@ -325,8 +325,8 @@ index 4a98e38bf..d760140c2 100644
+  /* undocumented functions */
+ +#ifndef Z_FREETYPE
+  ZEXTERN const char   * ZEXPORT zError           OF((int));
+- ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp));
+- ZEXTERN const z_crc_t FAR * ZEXPORT get_crc_table    OF((void));
++ ZEXTERN int            ZEXPORT _inflateSyncPoint OF((z_streamp));
++ ZEXTERN const z_crc_t FAR * ZEXPORT _get_crc_table    OF((void));
+ @@ -1927,6 +1959,7 @@ ZEXTERN int            ZEXPORTVA gzvprintf Z_ARG((gzFile file,
+                                                    va_list va));
+  #  endif
+@@ -349,7 +349,7 @@ index d9a20ae1b..14f0f1a85 100644
+  #if !defined(_WIN32) && \
+      (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+ @@ -195,6 +197,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+-     ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off_t));
++     ZEXTERN uLong ZEXPORT _crc32_combine64 OF((uLong, uLong, z_off_t));
+  #endif
+  
+ +#endif  /* !Z_FREETYPE */
+diff --git a/external/freetype/src/gzip/zlib.h b/external/freetype/src/gzip/zlib.h
+index d760140..b6097ad 100644
+--- a/external/freetype/src/gzip/zlib.h
++++ b/external/freetype/src/gzip/zlib.h
+@@ -1758,34 +1758,34 @@ ZEXTERN uLong ZEXPORT crc32 OF((uLong crc, const Bytef *buf, uInt len));
+ 
+ #ifndef Z_FREETYPE
+ 
+-ZEXTERN uLong ZEXPORT crc32_z OF((uLong crc, const Bytef *buf,
++ZEXTERN uLong ZEXPORT _crc32_z OF((uLong crc, const Bytef *buf,
+                                   z_size_t len));
+ /*
+      Same as crc32(), but with a size_t length.
+ */
+ 
+ /*
+-ZEXTERN uLong ZEXPORT crc32_combine OF((uLong crc1, uLong crc2, z_off_t len2));
++ZEXTERN uLong ZEXPORT _crc32_combine OF((uLong crc1, uLong crc2, z_off_t len2));
+ 
+      Combine two CRC-32 check values into one.  For two sequences of bytes,
+    seq1 and seq2 with lengths len1 and len2, CRC-32 check values were
+-   calculated for each, crc1 and crc2.  crc32_combine() returns the CRC-32
++   calculated for each, crc1 and crc2.  _crc32_combine() returns the CRC-32
+    check value of seq1 and seq2 concatenated, requiring only crc1, crc2, and
+    len2.
+ */
+ 
+ /*
+-ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t len2));
++ZEXTERN uLong ZEXPORT _crc32_combine_gen OF((z_off_t len2));
+ 
+      Return the operator corresponding to length len2, to be used with
+-   crc32_combine_op().
++   _crc32_combine_op().
+ */
+ 
+-ZEXTERN uLong ZEXPORT crc32_combine_op OF((uLong crc1, uLong crc2, uLong op));
++ZEXTERN uLong ZEXPORT _crc32_combine_op OF((uLong crc1, uLong crc2, uLong op));
+ /*
+-     Give the same result as crc32_combine(), using op in place of len2. op is
+-   is generated from len2 by crc32_combine_gen(). This will be faster than
+-   crc32_combine() if the generated op is used more than once.
++     Give the same result as _crc32_combine(), using op in place of len2. op is
++   is generated from len2 by _crc32_combine_gen(). This will be faster than
++   _crc32_combine() if the generated op is used more than once.
+ */
+ 
+ 
+@@ -1796,7 +1796,7 @@ ZEXTERN uLong ZEXPORT crc32_combine_op OF((uLong crc1, uLong crc2, uLong op));
+  */
+ ZEXTERN int ZEXPORT deflateInit_ OF((z_streamp strm, int level,
+                                      const char *version, int stream_size));
+-ZEXTERN int ZEXPORT inflateInit_ OF((z_streamp strm,
++ZEXTERN int ZEXPORT _inflateInit_ OF((z_streamp strm,
+                                      const char *version, int stream_size));
+ ZEXTERN int ZEXPORT deflateInit2_ OF((z_streamp strm, int  level, int  method,
+                                       int windowBits, int memLevel,
+@@ -1812,7 +1812,7 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
+ #  define z_deflateInit(strm, level) \
+           deflateInit_((strm), (level), ZLIB_VERSION, (int)sizeof(z_stream))
+ #  define z_inflateInit(strm) \
+-          inflateInit_((strm), ZLIB_VERSION, (int)sizeof(z_stream))
++          _inflateInit_((strm), ZLIB_VERSION, (int)sizeof(z_stream))
+ #  define z_deflateInit2(strm, level, method, windowBits, memLevel, strategy) \
+           deflateInit2_((strm),(level),(method),(windowBits),(memLevel),\
+                         (strategy), ZLIB_VERSION, (int)sizeof(z_stream))
+@@ -1826,7 +1826,7 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
+ #  define deflateInit(strm, level) \
+           deflateInit_((strm), (level), ZLIB_VERSION, (int)sizeof(z_stream))
+ #  define inflateInit(strm) \
+-          inflateInit_((strm), ZLIB_VERSION, (int)sizeof(z_stream))
++          _inflateInit_((strm), ZLIB_VERSION, (int)sizeof(z_stream))
+ #  define deflateInit2(strm, level, method, windowBits, memLevel, strategy) \
+           deflateInit2_((strm),(level),(method),(windowBits),(memLevel),\
+                         (strategy), ZLIB_VERSION, (int)sizeof(z_stream))
+@@ -1887,8 +1887,8 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+    ZEXTERN z_off64_t ZEXPORT gztell64 OF((gzFile));
+    ZEXTERN z_off64_t ZEXPORT gzoffset64 OF((gzFile));
+    ZEXTERN uLong ZEXPORT adler32_combine64 OF((uLong, uLong, z_off64_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off64_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine_gen64 OF((z_off64_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine64 OF((uLong, uLong, z_off64_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine_gen64 OF((z_off64_t));
+ #endif
+ 
+ #if !defined(ZLIB_INTERNAL) && defined(Z_WANT64)
+@@ -1906,8 +1906,8 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+ #    define gztell gztell64
+ #    define gzoffset gzoffset64
+ #    define adler32_combine adler32_combine64
+-#    define crc32_combine crc32_combine64
+-#    define crc32_combine_gen crc32_combine_gen64
++#    define _crc32_combine _crc32_combine64
++#    define _crc32_combine_gen _crc32_combine_gen64
+ #  endif
+ #  ifndef Z_LARGE64
+      ZEXTERN gzFile ZEXPORT gzopen64 OF((const char *, const char *));
+@@ -1915,8 +1915,8 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+      ZEXTERN z_off_t ZEXPORT gztell64 OF((gzFile));
+      ZEXTERN z_off_t ZEXPORT gzoffset64 OF((gzFile));
+      ZEXTERN uLong ZEXPORT adler32_combine64 OF((uLong, uLong, z_off_t));
+-     ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off_t));
+-     ZEXTERN uLong ZEXPORT crc32_combine_gen64 OF((z_off_t));
++     ZEXTERN uLong ZEXPORT _crc32_combine64 OF((uLong, uLong, z_off_t));
++     ZEXTERN uLong ZEXPORT _crc32_combine_gen64 OF((z_off_t));
+ #  endif
+ #else
+    ZEXTERN gzFile ZEXPORT gzopen OF((const char *, const char *));
+@@ -1924,16 +1924,16 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+    ZEXTERN z_off_t ZEXPORT gztell OF((gzFile));
+    ZEXTERN z_off_t ZEXPORT gzoffset OF((gzFile));
+    ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine OF((uLong, uLong, z_off_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine_gen OF((z_off_t));
+ #endif
+ 
+ #else /* Z_SOLO */
+ 
+ #ifndef Z_FREETYPE
+    ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine OF((uLong, uLong, z_off_t));
+-   ZEXTERN uLong ZEXPORT crc32_combine_gen OF((z_off_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine OF((uLong, uLong, z_off_t));
++   ZEXTERN uLong ZEXPORT _crc32_combine_gen OF((z_off_t));
+ #endif
+ 
+ #endif /* !Z_SOLO */
+@@ -1941,12 +1941,12 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+ /* undocumented functions */
+ #ifndef Z_FREETYPE
+ ZEXTERN const char   * ZEXPORT zError           OF((int));
+-ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp));
+-ZEXTERN const z_crc_t FAR * ZEXPORT get_crc_table    OF((void));
+-ZEXTERN int            ZEXPORT inflateUndermine OF((z_streamp, int));
+-ZEXTERN int            ZEXPORT inflateValidate OF((z_streamp, int));
++ZEXTERN int            ZEXPORT _inflateSyncPoint OF((z_streamp));
++ZEXTERN const z_crc_t FAR * ZEXPORT _get_crc_table    OF((void));
++ZEXTERN int            ZEXPORT _inflateUndermine OF((z_streamp, int));
++ZEXTERN int            ZEXPORT _inflateValidate OF((z_streamp, int));
+ ZEXTERN unsigned long  ZEXPORT inflateCodesUsed OF ((z_streamp));
+-ZEXTERN int            ZEXPORT inflateResetKeep OF((z_streamp));
++ZEXTERN int            ZEXPORT _inflateResetKeep OF((z_streamp));
+ ZEXTERN int            ZEXPORT deflateResetKeep OF((z_streamp));
+ #if defined(_WIN32) && !defined(Z_SOLO)
+ ZEXTERN gzFile         ZEXPORT gzopen_w OF((const wchar_t *path,
+diff --git a/external/freetype/src/gzip/zutil.h b/external/freetype/src/gzip/zutil.h
+index 14f0f1a..c7c4bf9 100644
+--- a/external/freetype/src/gzip/zutil.h
++++ b/external/freetype/src/gzip/zutil.h
+@@ -194,7 +194,7 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+ #if !defined(_WIN32) && \
+     (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
+     ZEXTERN uLong ZEXPORT adler32_combine64 OF((uLong, uLong, z_off_t));
+-    ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off_t));
++    ZEXTERN uLong ZEXPORT _crc32_combine64 OF((uLong, uLong, z_off_t));
+ #endif
+ 
+ #endif  /* !Z_FREETYPE */

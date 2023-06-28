@@ -749,6 +749,7 @@ endif ()
 if (HAS_SDLTTF)
   ExternalProject_Add (SDL2_ttf_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2_ttf-${SDLTTF_VER}.tar.gz
+    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/patches/SDL2_ttf-${SDLTTF_VER}.patch
     PREFIX ${CMAKE_BINARY_DIR}
     CMAKE_COMMAND ${CMD} cmake
     CMAKE_ARGS -DBUILD_SHARED_LIBS=OFF
