@@ -1,9 +1,61 @@
-From b44c59734ac43d9091ec78d61c278fdcef80948f Mon Sep 17 00:00:00 2001
+From cb33fff88968a6820e11ccaedab5c382fab4b76f Mon Sep 17 00:00:00 2001
 From: Mathieu Schroeter <mathieu@schroetersa.ch>
-Date: Wed, 28 Jun 2023 21:32:51 +0200
+Date: Wed, 28 Jun 2023 22:13:51 +0200
 Subject: Rename some functions in order to prevent clash with the linker
 
 
+diff --git a/external/freetype/docs/oldlogs/ChangeLog.21 b/external/freetype/docs/oldlogs/ChangeLog.21
+index e8a36ae..44f1b74 100644
+--- a/external/freetype/docs/oldlogs/ChangeLog.21
++++ b/external/freetype/docs/oldlogs/ChangeLog.21
+@@ -5825,7 +5825,7 @@
+ 	* src/gzip/ftgzip.c: C++ doesn't like that the array `inflate_mask'
+ 	is declared twice.  It is perhaps better to modify the zlib source
+ 	files directly instead of this hack.
+-	(zcalloc, zfree, ft_gzip_stream_close, ft_gzip_stream_io): Add casts
++	(_zcalloc, zfree, ft_gzip_stream_close, ft_gzip_stream_io): Add casts
+ 	to make build with g++ successful.
+ 
+ 2003-04-24  Manish Singh  <yosh@gimp.org>
+@@ -5919,7 +5919,7 @@
+ 
+ 2003-04-22  Werner Lemberg  <wl@gnu.org>
+ 
+-	* src/gzip/ftgzip.c (zcalloc) [!FT_CONFIG_OPTION_SYSTEM_ZLIB]:
++	* src/gzip/ftgzip.c (_zcalloc) [!FT_CONFIG_OPTION_SYSTEM_ZLIB]:
+ 	Convert K&R format to modern C usage.
+ 	(FT_Stream_OpenGzip): Use long constant.
+ 
+diff --git a/external/freetype/docs/oldlogs/ChangeLog.23 b/external/freetype/docs/oldlogs/ChangeLog.23
+index d0792cb..80c0afb 100644
+--- a/external/freetype/docs/oldlogs/ChangeLog.23
++++ b/external/freetype/docs/oldlogs/ChangeLog.23
+@@ -1758,12 +1758,12 @@
+ 
+ 2009-07-31  suzuki toshiya  <mpsuzuki@hiroshima-u.ac.jp>
+ 
+-	gzip: Use FT2 zcalloc() & zfree() in ftgzip.c by default.
++	gzip: Use FT2 _zcalloc() & zfree() in ftgzip.c by default.
+ 
+-	* src/gzip/ftgzip.c (zcalloc, zcfree): Disable all
+-	zcalloc() & zfree() by zlib in zutil.c, those in
++	* src/gzip/ftgzip.c (_zcalloc, _zcfree): Disable all
++	_zcalloc() & zfree() by zlib in zutil.c, those in
+ 	ftgzip.c by FT2 are enabled by default.  To use
+-	zlib zcalloc() & zfree(), define USE_ZLIB_ZCALLOC.
++	zlib _zcalloc() & zfree(), define USE_ZLIB_ZCALLOC.
+ 	See discussion:
+ 	https://lists.gnu.org/archive/html/freetype-devel/2009-02/msg00000.html
+ 
+@@ -1771,7 +1771,7 @@
+ 
+ 	gzip: Distinguish PureC from TurboC on MSDOS.
+ 
+-	* src/gzip/zutil.c (zcalloc, zcfree): Enable only for
++	* src/gzip/zutil.c (_zcalloc, _zcfree): Enable only for
+ 	MSDOS platform.
+ 
+ 2009-07-31  suzuki toshiya  <mpsuzuki@hiroshima-u.ac.jp>
 diff --git a/external/freetype/src/gzip/crc32.c b/external/freetype/src/gzip/crc32.c
 index 2ddc32d..e232595 100644
 --- a/external/freetype/src/gzip/crc32.c
@@ -105,8 +157,39 @@ index 2ddc32d..e232595 100644
      uLong crc1,
      uLong crc2,
      uLong op)
+diff --git a/external/freetype/src/gzip/ftgzip.c b/external/freetype/src/gzip/ftgzip.c
+index ba9bb20..1184383 100644
+--- a/external/freetype/src/gzip/ftgzip.c
++++ b/external/freetype/src/gzip/ftgzip.c
+@@ -54,7 +54,7 @@
+   /* original ZLib.                                                 */
+ 
+ #ifndef USE_ZLIB_ZCALLOC
+-#define MY_ZCALLOC /* prevent all zcalloc() & zfree() in zutil.c */
++#define MY_ZCALLOC /* prevent all _zcalloc() & zfree() in zutil.c */
+ #endif
+ 
+   /* Note that our `zlib.h' includes `ftzconf.h' instead of `zconf.h'; */
+@@ -163,7 +163,7 @@
+ #if !defined( FT_CONFIG_OPTION_SYSTEM_ZLIB ) && !defined( USE_ZLIB_ZCALLOC )
+ 
+   voidpf ZLIB_INTERNAL
+-  zcalloc ( voidpf    opaque,
++  _zcalloc ( voidpf    opaque,
+             unsigned  items,
+             unsigned  size )
+   {
+@@ -172,7 +172,7 @@
+ 
+ 
+   void ZLIB_INTERNAL
+-  zcfree( voidpf  opaque,
++  _zcfree( voidpf  opaque,
+           voidpf  ptr )
+   {
+     ft_gzip_free( opaque, ptr );
 diff --git a/external/freetype/src/gzip/ftzconf.h b/external/freetype/src/gzip/ftzconf.h
-index 5e1d68a..c025551 100644
+index 5e1d68a..de8261a 100644
 --- a/external/freetype/src/gzip/ftzconf.h
 +++ b/external/freetype/src/gzip/ftzconf.h
 @@ -36,9 +36,9 @@
@@ -154,6 +237,25 @@ index 5e1d68a..c025551 100644
  #  define inflate_copyright     z_inflate_copyright
  #  define inflate_fast          z_inflate_fast
  #  define inflate_table         z_inflate_table
+@@ -129,13 +129,13 @@
+ #    define uncompress            z_uncompress
+ #    define uncompress2           z_uncompress2
+ #  endif
+-#  define zError                z_zError
++#  define _zError                z_zError
+ #  ifndef Z_SOLO
+-#    define zcalloc               z_zcalloc
+-#    define zcfree                z_zcfree
++#    define _zcalloc               z_zcalloc
++#    define _zcfree                z_zcfree
+ #  endif
+-#  define zlibCompileFlags      z_zlibCompileFlags
+-#  define zlibVersion           z_zlibVersion
++#  define _zlibCompileFlags      z_zlibCompileFlags
++#  define _zlibVersion           z_zlibVersion
+ 
+ /* all zlib typedefs in zlib.h and zconf.h */
+ #  define Byte                  z_Byte
 @@ -520,7 +520,7 @@ typedef uLong FAR uLongf;
    #pragma map(deflateInit2_,"DEIN2")
    #pragma map(deflateEnd,"DEEND")
@@ -163,8 +265,30 @@ index 5e1d68a..c025551 100644
    #pragma map(inflateInit2_,"ININ2")
    #pragma map(inflateEnd,"INEND")
    #pragma map(inflateSync,"INSY")
+diff --git a/external/freetype/src/gzip/infback.c b/external/freetype/src/gzip/infback.c
+index 5fb8c67..46f8f56 100644
+--- a/external/freetype/src/gzip/infback.c
++++ b/external/freetype/src/gzip/infback.c
+@@ -45,7 +45,7 @@ int ZEXPORT inflateBackInit_(
+ #ifdef Z_SOLO
+         return Z_STREAM_ERROR;
+ #else
+-        strm->zalloc = zcalloc;
++        strm->zalloc = _zcalloc;
+         strm->opaque = (voidpf)0;
+ #endif
+     }
+@@ -53,7 +53,7 @@ int ZEXPORT inflateBackInit_(
+ #ifdef Z_SOLO
+         return Z_STREAM_ERROR;
+ #else
+-    strm->zfree = zcfree;
++    strm->zfree = _zcfree;
+ #endif
+     state = (struct inflate_state FAR *)ZALLOC(strm, 1,
+                                                sizeof(struct inflate_state));
 diff --git a/external/freetype/src/gzip/inflate.c b/external/freetype/src/gzip/inflate.c
-index 5bf5b81..112483b 100644
+index 5bf5b81..3272064 100644
 --- a/external/freetype/src/gzip/inflate.c
 +++ b/external/freetype/src/gzip/inflate.c
 @@ -118,7 +118,7 @@ local int inflateStateCheck(
@@ -185,6 +309,24 @@ index 5bf5b81..112483b 100644
  }
  
  int ZEXPORT inflateReset2(
+@@ -213,7 +213,7 @@ int ZEXPORT inflateInit2_(
+ #ifdef Z_SOLO
+         return Z_STREAM_ERROR;
+ #else
+-        strm->zalloc = zcalloc;
++        strm->zalloc = _zcalloc;
+         strm->opaque = (voidpf)0;
+ #endif
+     }
+@@ -221,7 +221,7 @@ int ZEXPORT inflateInit2_(
+ #ifdef Z_SOLO
+         return Z_STREAM_ERROR;
+ #else
+-        strm->zfree = zcfree;
++        strm->zfree = _zcfree;
+ #endif
+     state = (struct inflate_state FAR *)
+             ZALLOC(strm, 1, sizeof(struct inflate_state));
 @@ -239,7 +239,7 @@ int ZEXPORT inflateInit2_(
      return ret;
  }
@@ -222,7 +364,7 @@ index 5bf5b81..112483b 100644
      int check)
  {
 diff --git a/external/freetype/src/gzip/patches/freetype-zlib.diff b/external/freetype/src/gzip/patches/freetype-zlib.diff
-index 20d8429..d45de43 100644
+index 20d8429..175d464 100644
 --- a/external/freetype/src/gzip/patches/freetype-zlib.diff
 +++ b/external/freetype/src/gzip/patches/freetype-zlib.diff
 @@ -80,7 +80,7 @@ index 4375557b4..5bf5b815e 100644
@@ -256,6 +398,24 @@ index 20d8429..d45de43 100644
       return Z_OK;
   }
   
+@@ -208,7 +208,7 @@ index 4a98e38bf..d760140c2 100644
+  
+ +#ifndef Z_FREETYPE
+ +
+- #define zlib_version zlibVersion()
++ #define zlib_version _zlibVersion()
+  /* for compatibility with versions < 1.0.2 */
+  
+ @@ -246,7 +248,6 @@ ZEXTERN int ZEXPORT deflateInit OF((z_streamp strm, int level));
+@@ -272,7 +272,7 @@ index 4a98e38bf..d760140c2 100644
+  ZEXTERN int ZEXPORT inflateBack OF((z_streamp strm,
+                                      in_func in, void FAR *in_desc,
+                                      out_func out, void FAR *out_desc));
+-@@ -1214,6 +1226,8 @@ ZEXTERN uLong ZEXPORT zlibCompileFlags OF((void));
++@@ -1214,6 +1226,8 @@ ZEXTERN uLong ZEXPORT _zlibCompileFlags OF((void));
+       27-31: 0 (reserved)
+   */
+  
 @@ -287,7 +287,7 @@ index 4a98e38bf..d760140c2 100644
   
  +#ifndef Z_FREETYPE
@@ -265,7 +425,7 @@ index 20d8429..d45de43 100644
                                     z_size_t len));
   /*
  @@ -1822,6 +1838,19 @@ ZEXTERN int ZEXPORT inflateBackInit_ OF((z_streamp strm, int windowBits,
-@@ -316,8 +316,8 @@ index 4a98e38bf..d760140c2 100644
+@@ -316,17 +316,17 @@ index 4a98e38bf..d760140c2 100644
   
  +#ifndef Z_FREETYPE
      ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
@@ -276,12 +436,13 @@ index 20d8429..d45de43 100644
  +#endif
   
   #endif /* !Z_SOLO */
-@@ -325,8 +325,8 @@ index 4a98e38bf..d760140c2 100644
+  
   /* undocumented functions */
  +#ifndef Z_FREETYPE
-  ZEXTERN const char   * ZEXPORT zError           OF((int));
+- ZEXTERN const char   * ZEXPORT zError           OF((int));
 - ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp));
 - ZEXTERN const z_crc_t FAR * ZEXPORT get_crc_table    OF((void));
++ ZEXTERN const char   * ZEXPORT _zError           OF((int));
 + ZEXTERN int            ZEXPORT _inflateSyncPoint OF((z_streamp));
 + ZEXTERN const z_crc_t FAR * ZEXPORT _get_crc_table    OF((void));
  @@ -1927,6 +1959,7 @@ ZEXTERN int            ZEXPORTVA gzvprintf Z_ARG((gzFile file,
@@ -297,9 +458,45 @@ index 20d8429..d45de43 100644
   
  +#endif  /* !Z_FREETYPE */
 diff --git a/external/freetype/src/gzip/zlib.h b/external/freetype/src/gzip/zlib.h
-index d760140..b6097ad 100644
+index d760140..7cf6d05 100644
 --- a/external/freetype/src/gzip/zlib.h
 +++ b/external/freetype/src/gzip/zlib.h
+@@ -213,14 +213,14 @@ typedef gz_header FAR *gz_headerp;
+ 
+ #ifndef Z_FREETYPE
+ 
+-#define zlib_version zlibVersion()
++#define zlib_version _zlibVersion()
+ /* for compatibility with versions < 1.0.2 */
+ 
+ 
+                         /* basic functions */
+ 
+-ZEXTERN const char * ZEXPORT zlibVersion OF((void));
+-/* The application can compare zlibVersion and ZLIB_VERSION for consistency.
++ZEXTERN const char * ZEXPORT _zlibVersion OF((void));
++/* The application can compare _zlibVersion and ZLIB_VERSION for consistency.
+    If the first character differs, the library code actually used is not
+    compatible with the zlib.h header file used by the application.  This check
+    is automatically made by deflateInit and inflateInit.
+@@ -1185,7 +1185,7 @@ ZEXTERN int ZEXPORT inflateBackEnd OF((z_streamp strm));
+    state was inconsistent.
+ */
+ 
+-ZEXTERN uLong ZEXPORT zlibCompileFlags OF((void));
++ZEXTERN uLong ZEXPORT _zlibCompileFlags OF((void));
+ /* Return flags indicating compile-time options.
+ 
+     Type sizes, two bits each, 00 = 16 bits, 01 = 32, 10 = 64, 11 = other:
+@@ -1491,7 +1491,7 @@ ZEXTERN int ZEXPORTVA gzprintf Z_ARG((gzFile file, const char *format, ...));
+    buffer overflow with unpredictable consequences, which is possible only if
+    zlib was compiled with the insecure functions sprintf() or vsprintf(),
+    because the secure snprintf() or vsnprintf() functions were not available.
+-   This can be determined using zlibCompileFlags().
++   This can be determined using _zlibCompileFlags().
+ */
+ 
+ ZEXTERN int ZEXPORT gzputs OF((gzFile file, const char *s));
 @@ -1758,34 +1758,34 @@ ZEXTERN uLong ZEXPORT crc32 OF((uLong crc, const Bytef *buf, uInt len));
  
  #ifndef Z_FREETYPE
@@ -404,7 +601,7 @@ index d760140..b6097ad 100644
  #  endif
  #else
     ZEXTERN gzFile ZEXPORT gzopen OF((const char *, const char *));
-@@ -1924,16 +1924,16 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+@@ -1924,29 +1924,29 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
     ZEXTERN z_off_t ZEXPORT gztell OF((gzFile));
     ZEXTERN z_off_t ZEXPORT gzoffset OF((gzFile));
     ZEXTERN uLong ZEXPORT adler32_combine OF((uLong, uLong, z_off_t));
@@ -425,14 +622,15 @@ index d760140..b6097ad 100644
  #endif
  
  #endif /* !Z_SOLO */
-@@ -1941,12 +1941,12 @@ ZEXTERN int ZEXPORT gzgetc_ OF((gzFile file));  /* backward compatibility */
+ 
  /* undocumented functions */
  #ifndef Z_FREETYPE
- ZEXTERN const char   * ZEXPORT zError           OF((int));
+-ZEXTERN const char   * ZEXPORT zError           OF((int));
 -ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp));
 -ZEXTERN const z_crc_t FAR * ZEXPORT get_crc_table    OF((void));
 -ZEXTERN int            ZEXPORT inflateUndermine OF((z_streamp, int));
 -ZEXTERN int            ZEXPORT inflateValidate OF((z_streamp, int));
++ZEXTERN const char   * ZEXPORT _zError           OF((int));
 +ZEXTERN int            ZEXPORT _inflateSyncPoint OF((z_streamp));
 +ZEXTERN const z_crc_t FAR * ZEXPORT _get_crc_table    OF((void));
 +ZEXTERN int            ZEXPORT _inflateUndermine OF((z_streamp, int));
@@ -443,8 +641,106 @@ index d760140..b6097ad 100644
  ZEXTERN int            ZEXPORT deflateResetKeep OF((z_streamp));
  #if defined(_WIN32) && !defined(Z_SOLO)
  ZEXTERN gzFile         ZEXPORT gzopen_w OF((const wchar_t *path,
+diff --git a/external/freetype/src/gzip/zutil.c b/external/freetype/src/gzip/zutil.c
+index a19ac2b..9800faa 100644
+--- a/external/freetype/src/gzip/zutil.c
++++ b/external/freetype/src/gzip/zutil.c
+@@ -24,12 +24,12 @@ z_const char * const z_errmsg[10] = {
+ };
+ 
+ 
+-const char * ZEXPORT zlibVersion()
++const char * ZEXPORT _zlibVersion()
+ {
+     return ZLIB_VERSION;
+ }
+ 
+-uLong ZEXPORT zlibCompileFlags()
++uLong ZEXPORT _zlibCompileFlags()
+ {
+     uLong flags;
+ 
+@@ -130,7 +130,7 @@ void ZLIB_INTERNAL z_error (
+ /* exported to allow conversion of error code to string for compress() and
+  * uncompress()
+  */
+-const char * ZEXPORT zError(
++const char * ZEXPORT _zError(
+     int err)
+ {
+     return ERR_MSG(err);
+@@ -193,7 +193,7 @@ void ZLIB_INTERNAL zmemzero(
+ /* Turbo C malloc() does not allow dynamic allocation of 64K bytes
+  * and farmalloc(64K) returns a pointer with an offset of 8, so we
+  * must fix the pointer. Warning: the pointer must be put back to its
+- * original form in order to free it, use zcfree().
++ * original form in order to free it, use _zcfree().
+  */
+ 
+ #define MAX_PTR 10
+@@ -214,7 +214,7 @@ local ptr_table table[MAX_PTR];
+  * a protected system like OS/2. Use Microsoft C instead.
+  */
+ 
+-voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, unsigned items, unsigned size)
++voidpf ZLIB_INTERNAL _zcalloc (voidpf opaque, unsigned items, unsigned size)
+ {
+     voidpf buf;
+     ulg bsize = (ulg)items*size;
+@@ -240,7 +240,7 @@ voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, unsigned items, unsigned size)
+     return buf;
+ }
+ 
+-void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
++void ZLIB_INTERNAL _zcfree (voidpf opaque, voidpf ptr)
+ {
+     int n;
+ 
+@@ -261,7 +261,7 @@ void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
+         next_ptr--;
+         return;
+     }
+-    Assert(0, "zcfree: ptr not found");
++    Assert(0, "_zcfree: ptr not found");
+ }
+ 
+ #endif /* __TURBOC__ */
+@@ -277,13 +277,13 @@ void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
+ #  define _hfree   hfree
+ #endif
+ 
+-voidpf ZLIB_INTERNAL zcalloc (voidpf opaque, uInt items, uInt size)
++voidpf ZLIB_INTERNAL _zcalloc (voidpf opaque, uInt items, uInt size)
+ {
+     (void)opaque;
+     return _halloc((long)items, size);
+ }
+ 
+-void ZLIB_INTERNAL zcfree (voidpf opaque, voidpf ptr)
++void ZLIB_INTERNAL _zcfree (voidpf opaque, voidpf ptr)
+ {
+     (void)opaque;
+     _hfree(ptr);
+@@ -302,7 +302,7 @@ extern voidp  calloc OF((uInt items, uInt size));
+ extern void   free   OF((voidpf ptr));
+ #endif
+ 
+-voidpf ZLIB_INTERNAL zcalloc (
++voidpf ZLIB_INTERNAL _zcalloc (
+     voidpf opaque,
+     unsigned items,
+     unsigned size)
+@@ -312,7 +312,7 @@ voidpf ZLIB_INTERNAL zcalloc (
+                               (voidpf)calloc(items, size);
+ }
+ 
+-void ZLIB_INTERNAL zcfree (
++void ZLIB_INTERNAL _zcfree (
+     voidpf opaque,
+     voidpf ptr)
+ {
 diff --git a/external/freetype/src/gzip/zutil.h b/external/freetype/src/gzip/zutil.h
-index 14f0f1a..c7c4bf9 100644
+index 14f0f1a..ef64038 100644
 --- a/external/freetype/src/gzip/zutil.h
 +++ b/external/freetype/src/gzip/zutil.h
 @@ -194,7 +194,7 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
@@ -456,3 +752,15 @@ index 14f0f1a..c7c4bf9 100644
  #endif
  
  #endif  /* !Z_FREETYPE */
+@@ -261,9 +261,9 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+ #endif
+ 
+ #ifndef Z_SOLO
+-   voidpf ZLIB_INTERNAL zcalloc OF((voidpf opaque, unsigned items,
++   voidpf ZLIB_INTERNAL _zcalloc OF((voidpf opaque, unsigned items,
+                                     unsigned size));
+-   void ZLIB_INTERNAL zcfree  OF((voidpf opaque, voidpf ptr));
++   void ZLIB_INTERNAL _zcfree  OF((voidpf opaque, voidpf ptr));
+ #endif
+ 
+ #define ZALLOC(strm, items, size) \
