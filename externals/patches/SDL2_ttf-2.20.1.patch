@@ -1,4 +1,4 @@
-From cb33fff88968a6820e11ccaedab5c382fab4b76f Mon Sep 17 00:00:00 2001
+From 08579ba339a1bb94ea5483a6a10b30c4c0cde013 Mon Sep 17 00:00:00 2001
 From: Mathieu Schroeter <mathieu@schroetersa.ch>
 Date: Wed, 28 Jun 2023 22:13:51 +0200
 Subject: Rename some functions in order to prevent clash with the linker
@@ -364,7 +364,7 @@ index 5bf5b81..3272064 100644
      int check)
  {
 diff --git a/external/freetype/src/gzip/patches/freetype-zlib.diff b/external/freetype/src/gzip/patches/freetype-zlib.diff
-index 20d8429..175d464 100644
+index 20d8429..80f2a4d 100644
 --- a/external/freetype/src/gzip/patches/freetype-zlib.diff
 +++ b/external/freetype/src/gzip/patches/freetype-zlib.diff
 @@ -80,7 +80,7 @@ index 4375557b4..5bf5b815e 100644
@@ -448,15 +448,35 @@ index 20d8429..175d464 100644
  @@ -1927,6 +1959,7 @@ ZEXTERN int            ZEXPORTVA gzvprintf Z_ARG((gzFile file,
                                                     va_list va));
   #  endif
-@@ -349,7 +349,7 @@ index d9a20ae1b..14f0f1a85 100644
+@@ -339,7 +339,7 @@ diff --git a/src/gzip/zutil.h b/src/gzip/zutil.h
+ index d9a20ae1b..14f0f1a85 100644
+ --- a/src/gzip/zutil.h
+ +++ b/src/gzip/zutil.h
+-@@ -188,6 +188,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++@@ -188,6 +188,8 @@ extern z_const char * const _z_errmsg[10]; /* indexed by 2-zlib_error */
+    #pragma warn -8066
+  #endif
+  
+@@ -348,8 +348,8 @@ index d9a20ae1b..14f0f1a85 100644
+  /* provide prototypes for these when building zlib without LFS */
   #if !defined(_WIN32) && \
       (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
- @@ -195,6 +197,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
+-@@ -195,6 +197,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 -     ZEXTERN uLong ZEXPORT crc32_combine64 OF((uLong, uLong, z_off_t));
++@@ -195,6 +197,8 @@ extern z_const char * const _z_errmsg[10]; /* indexed by 2-zlib_error */
 +     ZEXTERN uLong ZEXPORT _crc32_combine64 OF((uLong, uLong, z_off_t));
   #endif
   
  +#endif  /* !Z_FREETYPE */
+@@ -357,7 +357,7 @@ index d9a20ae1b..14f0f1a85 100644
+          /* common defaults */
+  
+  #ifndef OS_CODE
+-@@ -226,9 +230,9 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++@@ -226,9 +230,9 @@ extern z_const char * const _z_errmsg[10]; /* indexed by 2-zlib_error */
+  #    define zmemcmp _fmemcmp
+  #    define zmemzero(dest, len) _fmemset(dest, 0, len)
+  #  else
 diff --git a/external/freetype/src/gzip/zlib.h b/external/freetype/src/gzip/zlib.h
 index d760140..7cf6d05 100644
 --- a/external/freetype/src/gzip/zlib.h
@@ -642,9 +662,18 @@ index d760140..7cf6d05 100644
  #if defined(_WIN32) && !defined(Z_SOLO)
  ZEXTERN gzFile         ZEXPORT gzopen_w OF((const wchar_t *path,
 diff --git a/external/freetype/src/gzip/zutil.c b/external/freetype/src/gzip/zutil.c
-index a19ac2b..9800faa 100644
+index a19ac2b..669eb21 100644
 --- a/external/freetype/src/gzip/zutil.c
 +++ b/external/freetype/src/gzip/zutil.c
+@@ -10,7 +10,7 @@
+ #  include "gzguts.h"
+ #endif
+ 
+-z_const char * const z_errmsg[10] = {
++z_const char * const _z_errmsg[10] = {
+     (z_const char *)"need dictionary",     /* Z_NEED_DICT       2  */
+     (z_const char *)"stream end",          /* Z_STREAM_END      1  */
+     (z_const char *)"",                    /* Z_OK              0  */
 @@ -24,12 +24,12 @@ z_const char * const z_errmsg[10] = {
  };
  
@@ -740,9 +769,22 @@ index a19ac2b..9800faa 100644
      voidpf ptr)
  {
 diff --git a/external/freetype/src/gzip/zutil.h b/external/freetype/src/gzip/zutil.h
-index 14f0f1a..ef64038 100644
+index 14f0f1a..b8bd839 100644
 --- a/external/freetype/src/gzip/zutil.h
 +++ b/external/freetype/src/gzip/zutil.h
+@@ -53,10 +53,10 @@ typedef unsigned long  ulg;
+ #  endif
+ #endif
+ 
+-extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++extern z_const char * const _z_errmsg[10]; /* indexed by 2-zlib_error */
+ /* (size given to avoid silly warnings with Visual C++) */
+ 
+-#define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
++#define ERR_MSG(err) _z_errmsg[Z_NEED_DICT-(err)]
+ 
+ #define ERR_RETURN(strm,err) \
+   return (strm->msg = ERR_MSG(err), (err))
 @@ -194,7 +194,7 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
  #if !defined(_WIN32) && \
      (!defined(_LARGEFILE64_SOURCE) || _LFS64_LARGEFILE-0 == 0)
