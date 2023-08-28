@@ -144,6 +144,7 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 | [SDL2][18]            | zlib license   | a cross-platform software library designed to provide a HAL to computer multimedia hardware |
 | [SDL2_image][19]      | zlib license   | an image loading library that is used with the SDL library                                  |
 | [SDL2_mixer][20]      | zlib license   | a sound mixing library that is used with the SDL library                                    |
+| [SDL2_ttf][24]        | zlib license   | support for TrueType (.ttf) font files with the SDL library                                 |
 | [zlib][21]            | own license    | a Massively Spiffy Yet Delicately Unobtrusive Compression Library                           |
 
 [1]: http://appimage.org
@@ -164,8 +165,9 @@ _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
 [16]: https://freedesktop.org/software/pulseaudio/doxygen/
 [17]: https://github.com/katajakasa/SDL_kitchensink
 [18]: https://www.libsdl.org
-[19]: https://www.libsdl.org/projects/SDL_image/
-[20]: https://www.libsdl.org/projects/SDL_mixer/
+[19]: https://github.com/libsdl-org/SDL_image
+[20]: https://github.com/libsdl-org/SDL_mixer
 [21]: https://zlib.net/
 [22]: https://xiph.org/downloads/
 [23]: http://www.mega-nerd.com/libsndfile/
+[24]: https://github.com/libsdl-org/SDL_ttf
