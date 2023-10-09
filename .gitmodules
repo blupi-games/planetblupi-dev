@@ -7,6 +7,3 @@
 [submodule "planetblupi-data"]
 	path = planetblupi-data
 	url = ../planetblupi-data.git
-[submodule "planetblupi-www"]
-	path = planetblupi-www
-	url = ../planetblupi-www.git
