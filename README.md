@@ -49,7 +49,6 @@ submodules.
 
 - **source-code**: `planetblupi/`
 - **source-assets**: `planetblupi-data/`
-- **website**: `planetblupi-www/` (see <https://www.blupi.org>)
 
 ### Linux
 
