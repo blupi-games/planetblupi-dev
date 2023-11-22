@@ -33,7 +33,7 @@ if (BUILD_DARWIN)
   set (CMD_LDFLAGS "-L${CMAKE_BINARY_DIR}/lib -framework AudioToolBox -framework AudioUnit -framework CoreAudio -framework CoreFoundation -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo -framework Carbon")
 
   if (OLD_SDK)
-    set (OSX_SDK_VERSION 10.9)
+    set (OSX_SDK_VERSION 10.13)
     set (CMAKE_OSX_DEPLOYMENT_TARGET ${OSX_SDK_VERSION})
     set (CMD_CXXFLAGS "-mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_CXX_FLAGS}")
     set (CMD_CFLAGS "-mmacosx-version-min=${OSX_SDK_VERSION} ${CMAKE_C_FLAGS}")
@@ -79,7 +79,7 @@ DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPE
 
 if (NOT BUILD_JS)
   set (HAS_SDLMIXER ON)
-  set (SDLMIXER_VER 2.6.2)
+  set (SDLMIXER_VER 2.6.3)
   DLEXT (https://github.com/libsdl-org/SDL_mixer/releases/download/release-${SDLMIXER_VER}/SDL2_mixer-${SDLMIXER_VER}.tar.gz SDL2_mixer-${SDLMIXER_VER}.tar.gz)
 
   set (HAS_ZLIB ON)
@@ -103,15 +103,15 @@ if (NOT BUILD_JS)
   DLEXT (http://downloads.xiph.org/releases/ogg/libogg-${OGG_VER}.tar.xz libogg-${OGG_VER}.tar.xz)
 
   set (HAS_VORBIS ON)
-  set (VORBIS_VER 1.3.6)
+  set (VORBIS_VER 1.3.7)
   DLEXT (http://downloads.xiph.org/releases/vorbis/libvorbis-${VORBIS_VER}.tar.xz libvorbis-${VORBIS_VER}.tar.xz)
 
   set (HAS_SDL ON)
-  set (SDL_VER 2.26.1)
+  set (SDL_VER 2.28.5)
   DLEXT (https://www.libsdl.org/release/SDL2-${SDL_VER}.tar.gz SDL2-${SDL_VER}.tar.bz2)
 
   set (HAS_SDLIMAGE ON)
-  set (SDLIMAGE_VER 2.6.2)
+  set (SDLIMAGE_VER 2.6.3)
   DLEXT (https://github.com/libsdl-org/SDL_image/releases/download/release-${SDLIMAGE_VER}/SDL2_image-${SDLIMAGE_VER}.tar.gz SDL2_image-${SDLIMAGE_VER}.tar.gz)
 
   set (HAS_SDLTTF ON)
@@ -483,6 +483,7 @@ endif ()
 if (HAS_VORBIS)
   ExternalProject_Add (libvorbis_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/libvorbis-${VORBIS_VER}.tar.xz
+    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/externals/patches/libvorbis-${VORBIS_VER}.patch
     PREFIX ${CMAKE_BINARY_DIR}
     CONFIGURE_COMMAND ${CMD} ./configure
       --prefix=${CMAKE_BINARY_DIR}
