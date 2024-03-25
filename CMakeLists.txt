@@ -74,7 +74,7 @@ set (ARGAGG_VER 0.4.6)
 DLEXT (https://github.com/vietjtnguyen/argagg/archive/${ARGAGG_VER}.tar.gz argagg-${ARGAGG_VER}.tar.gz)
 
 set (HAS_FFMPEG ON)
-set (FFMPEG_VER 4.1.1)
+set (FFMPEG_VER 5.1.4)
 DLEXT (http://www.ffmpeg.org/releases/ffmpeg-${FFMPEG_VER}.tar.xz ffmpeg-${FFMPEG_VER}.tar.xz)
 
 if (NOT BUILD_JS)
@@ -408,7 +408,6 @@ if (HAS_FFMPEG)
       --enable-demuxer=matroska
       --enable-protocol=file
       --disable-crystalhd
-      --disable-xvmc
       --disable-vaapi
       --disable-videotoolbox
       --disable-vdpau
