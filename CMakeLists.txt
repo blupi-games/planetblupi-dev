@@ -805,14 +805,23 @@ endif ()
 ##############
 
 if (BUILD_LINUX AND NOT DISABLE_APPIMAGE)
+  set (APPIMAGE_APPRUN_BIN     "AppRun-x86_64")
+  set (APPIMAGE_APPRUN_URL     "https://github.com/probonopd/AppImageKit/releases/download/continuous/${APPIMAGE_APPRUN_BIN}")
+  set (APPIMAGE_APPRUN_PROGRAM "${CMAKE_CURRENT_SOURCE_DIR}/externals/${APPIMAGE_APPRUN_BIN}")
+
   set (APPIMAGE_TOOL_BIN     "appimagetool-x86_64.AppImage")
   set (APPIMAGE_TOOL_URL     "https://github.com/AppImage/appimagetool/releases/download/continuous/${APPIMAGE_TOOL_BIN}")
   set (APPIMAGE_TOOL_PROGRAM "${CMAKE_CURRENT_SOURCE_DIR}/externals/${APPIMAGE_TOOL_BIN}")
+
+  if (NOT EXISTS "${APPIMAGE_APPRUN_PROGRAM}")
+    file (DOWNLOAD "${APPIMAGE_APPRUN_URL}" "${APPIMAGE_APPRUN_PROGRAM}")
+  endif ()
 
   if (NOT EXISTS "${APPIMAGE_TOOL_PROGRAM}")
     file (DOWNLOAD "${APPIMAGE_TOOL_URL}" "${APPIMAGE_TOOL_PROGRAM}")
   endif ()
 
+  execute_process (COMMAND /bin/chmod 0755 "${APPIMAGE_APPRUN_PROGRAM}")
   execute_process (COMMAND /bin/chmod 0755 "${APPIMAGE_TOOL_PROGRAM}")
 endif ()
 
@@ -823,6 +832,7 @@ ExternalProject_Add (planetblupi_Project
   PREFIX ${CMAKE_BINARY_DIR}
   CMAKE_COMMAND ${CMD} cmake
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+             -DAPPIMAGE_APPRUN_PROGRAM=${APPIMAGE_APPRUN_PROGRAM}
              -DAPPIMAGE_ASSISTANT_PROGRAM=${APPIMAGE_TOOL_PROGRAM}
              -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
              -DPB_HTTP_VERSION_CHECK=${HAS_CURL}
