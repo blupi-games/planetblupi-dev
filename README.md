@@ -2,19 +2,19 @@
 
 ![blupi](blupi.png)
 
-This bundle is the main repository for building the _Planet Blupi_ game. If
-you are an official distribution packager, maybe you can directly use the
-`https://github.com/blupi-games/planetblupi.git` repository instead of this
-one but **it's not the recommended way** and in the case of a distribution,
-it needs some improvements in the `CMakeLists.txt` file (based on [CMake][6]).
+This bundle is the main repository for building the _Planet Blupi_ game. If you
+are an official distribution packager, maybe you can directly use the
+`https://github.com/blupi-games/planetblupi.git` repository instead of this one
+but **it's not the recommended way** and in the case of a distribution, it needs
+some improvements in the `CMakeLists.txt` file (based on [CMake][6]).
 
-The game is built with static linking as much as possible. The goal is to
-limit the linking of dynamic libraries which are not available natively on
-the host operating system of most users. There is only one exception on Windows
-about the use of the dynamic `libwinpthread-1.dll` library. Most dependencies
-are built via the `CMakeLists.txt` file provided here (libpng, FFmpeg, SDL2,
-and more with the appropriate flags). For example, FFmpeg is built only with
-the necessary codecs.
+The game is built with static linking as much as possible. The goal is to limit
+the linking of dynamic libraries which are not available natively on the host
+operating system of most users. There is only one exception on Windows about the
+use of the dynamic `libwinpthread-1.dll` library. Most dependencies are built
+via the `CMakeLists.txt` file provided here (libpng, FFmpeg, SDL2, and more with
+the appropriate flags). For example, FFmpeg is built only with the necessary
+codecs.
 
 For Linux, the release is packaged in an [AppImage][1]. The user can download
 the image and adds the executable flag. Then the game is ready to play (no root
