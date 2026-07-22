@@ -122,6 +122,11 @@ directory according to the platform.
 - **Darwin**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.dmg`
 - **Windows**: look at `Release/src/planetblupi_Project/planetblupi-X.Y.Z.exe`
 
+## AI Policy
+
+AI-generated code is not accepted in this project. Everything here is created by
+humans, for humans.
+
 # Licenses
 
 _Planet Blupi_ and all resource files are licensed to the GPLv3+ license.
