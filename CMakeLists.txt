@@ -599,6 +599,8 @@ if (HAS_SDL)
       --disable-pulseaudio-shared
       --disable-jack
       --disable-jack-shared
+      --disable-pipewire
+      --disable-pipewire-shared
     )
   elseif (BUILD_WINDOWS)
     set (SDL2_CONFIGURE
