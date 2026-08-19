@@ -629,7 +629,7 @@ if (HAS_SDL)
   ExternalProject_Add (SDL2_Project
     URL ${CMAKE_CURRENT_SOURCE_DIR}/externals/SDL2-${SDL_VER}.tar.bz2
     PREFIX ${CMAKE_BINARY_DIR}
-    CONFIGURE_COMMAND ${CMD} ./configure
+    CONFIGURE_COMMAND ${CMD} env CFLAGS=-Wno-error=incompatible-pointer-types ./configure
       --prefix=${CMAKE_BINARY_DIR}
       --disable-shared
       --enable-static
