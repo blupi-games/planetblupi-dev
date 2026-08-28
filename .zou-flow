@@ -1,4 +1,2 @@
 [sku]
 	principalModuleId = planetblupi
-[update-version]
-        custom = update-version.json
